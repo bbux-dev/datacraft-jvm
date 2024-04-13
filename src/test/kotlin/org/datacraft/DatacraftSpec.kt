@@ -2,8 +2,6 @@ package org.datacraft
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.nulls.shouldNotBeNull
-import org.example.org.datacraft.DataSpec
-import org.example.org.datacraft.Datacraft
 
 class DatacraftSpec : StringSpec({
     "parseSpec should correctly parse a raw spec into a Map of FieldSpec" {
@@ -19,7 +17,7 @@ class DatacraftSpec : StringSpec({
                 "foo": {
                     "type": "values",
                     "data": ["one", "two", "tre"]
-                }
+                }   
             }
         """.trimIndent()
         assert(TestUtils.validateJson(json))

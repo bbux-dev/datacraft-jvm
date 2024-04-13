@@ -1,7 +1,7 @@
-package org.example.org.datacraft
+package org.datacraft
 
 import com.google.gson.Gson
-import org.datacraft.FieldSpec
+import kotlinx.serialization.json.Json
 import java.util.Collections
 
 object Datacraft {
@@ -33,8 +33,9 @@ object Datacraft {
     }
 
     fun parseString(json: String): DataSpec {
+        val processed = Preprocessor.preprocessSpec(Json.parseToJsonElement(json));
         @Suppress("UNCHECKED_CAST")
-        val data: Map<String, Any?> = Gson().fromJson(json, Map::class.java) as Map<String, Any?>
+        val data: Map<String, Any?> = Gson().fromJson(processed, Map::class.java) as Map<String, Any?>
         return DataSpec(parse(data))
     }
 }
