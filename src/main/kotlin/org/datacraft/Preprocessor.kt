@@ -2,7 +2,6 @@ package org.datacraft
 
 import kotlinx.serialization.json.*
 import java.net.URLDecoder
-import java.util.regex.Pattern
 
 object Preprocessor {
     /**
@@ -11,7 +10,9 @@ object Preprocessor {
     fun preprocessSpec(rawSpec: JsonElement): String {
         // Check if the input is a JsonObject
         if (rawSpec !is JsonObject)
-            throw SpecException("Cannot process non object specs! ${Json.encodeToString(JsonElement.serializer(), rawSpec)}")
+            throw SpecException(
+                "Cannot process non object specs! ${Json.encodeToString(JsonElement.serializer(), rawSpec)}"
+            )
 
         val updatedSpec = buildJsonObject {
             // Iterate through each entry in the JsonObject

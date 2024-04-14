@@ -37,8 +37,18 @@ class DataSpecTransformTests : StringSpec({
             """{"geo": {"type": "geo.pair"}}"""
         ),
         Pair(
-            """{"zero_to_ten?prefix=A-": {"type": "range", "data": [0, 10, 0.5], "config": {"prefix": "C-"}}, "ztt:range?prefix=B-": [0, 10, 0.5]}""",
-            """{"zero_to_ten": {"type": "range", "data": [0, 10, 0.5], "config": {"prefix": "A-"}}, "ztt": {"type": "range", "data": [0, 10, 0.5], "config": {"prefix": "B-"}}}"""
+            """
+            {
+              "zero_to_ten?prefix=A-": {"type": "range", "data": [0, 10, 0.5], "config": {"prefix": "C-"}},
+              "ztt:range?prefix=B-": [0, 10, 0.5]
+            }
+            """,
+            """
+            {
+              "zero_to_ten": {"type": "range", "data": [0, 10, 0.5], "config": {"prefix": "A-"}},
+              "ztt": {"type": "range", "data": [0, 10, 0.5], "config": {"prefix": "B-"}}
+            }
+            """
         )
     )
 

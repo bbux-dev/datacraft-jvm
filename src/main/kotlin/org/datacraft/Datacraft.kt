@@ -12,7 +12,7 @@ object Datacraft {
                 @Suppress("UNCHECKED_CAST")
                 specs.putAll(parse(value as Map<String, Any?>))
             }
-            specs[key] = fieldSpecFrom(value) ?: throw IllegalArgumentException("Invalid value for FieldSpec")
+            specs[key] = fieldSpecFrom(value) ?: throw SpecException("Invalid value for FieldSpec $value")
         }
         return specs
     }
