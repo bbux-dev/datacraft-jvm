@@ -2,16 +2,17 @@ package org.datacraft
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainAll
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
 class DataSpecTests : StringSpec({
     "parseSpec should correctly parse a raw spec into a Map of FieldSpec" {
-        val rawSpec: Map<String, Any> = mapOf("field" to Specs.values(listOf("one", "two", "tre")))
-        val spec: Map<String, FieldSpec> = DataSpec.parseRaw(rawSpec)
+        val rawSpec: Map<String, Any?> = mapOf("field" to Specs.values(listOf("one", "two", "tre")))
+        val spec: DataSpec = DataSpec.parse(rawSpec)
 
-        spec.size shouldBe 1
+        spec.data.size shouldBe 1
     }
 
     "parseString should correctly parse a JSON string into a DataSpec object" {
@@ -72,4 +73,28 @@ class DataSpecTests : StringSpec({
 
         record.keys shouldContainAll listOf("id", "name")
     }
+
+    "generateRecords should return correct number of populated User objects" {
+        // Setup
+        val fields = mapOf(
+            "id" to 1,
+            "name" to "Alice",
+            "age" to 30
+        )
+        val dataSpec = DataSpec.parse(fields)
+
+        // Test
+        val results = dataSpec.generateRecords(3, User::class.java).asSequence().toList()
+
+        // Assertions
+        results.size shouldBe 3
+        results shouldContainExactly listOf(
+            User(1, "Alice", 30),
+            User(1, "Alice", 30),
+            User(1, "Alice", 30)
+        )
+    }
+
 })
+
+data class User(val id: Int, val name: String, val age: Int)

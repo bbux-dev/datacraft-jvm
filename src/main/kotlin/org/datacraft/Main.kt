@@ -1,4 +1,4 @@
-package org.example.org.datacraft
+package org.datacraft
 
 object Main {
     fun main(args: Array<String?>?) {
