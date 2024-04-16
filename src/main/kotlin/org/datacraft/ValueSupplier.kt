@@ -9,5 +9,5 @@ interface ValueSupplier<T> {
      * @param iteration The current iteration count.
      * @return A value of type [T].
      */
-    fun next(iteration: Int): T
+    fun next(iteration: Long): T
 }

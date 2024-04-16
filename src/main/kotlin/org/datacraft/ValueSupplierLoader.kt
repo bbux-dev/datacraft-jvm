@@ -1,5 +1,6 @@
 package org.datacraft
 
 interface ValueSupplierLoader<T> {
-    fun load(spec: FieldSpec, loader: Any?): ValueSupplier<T>
+    fun typeName() : String
+    fun load(spec: FieldSpec, loader: Loader): ValueSupplier<T>
 }

@@ -9,7 +9,7 @@ import java.util.Collections
  * @property data The data associated with the field, whose format and type can vary depending on the field type.
  * @property config A map of configuration options that can modify how the data is processed or generated.
  */
-class FieldSpec(val type: String, val data: Any, val config: Map<String, Any>) {
+class FieldSpec(val type: String, val data: Any?, val config: Map<String, Any>?) {
 
     companion object {
         /**
@@ -19,7 +19,7 @@ class FieldSpec(val type: String, val data: Any, val config: Map<String, Any>) {
          * @param data The data for the field.
          * @return A new [FieldSpec] instance.
          */
-        fun make(type: String, data: Any): FieldSpec {
+        fun make(type: String, data: Any?): FieldSpec {
             return FieldSpec(type, data, Collections.emptyMap())
         }
 

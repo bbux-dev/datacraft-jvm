@@ -6,7 +6,7 @@ import io.kotest.matchers.shouldBe
 class SuppliersTest : StringSpec({
     "values should correctly supply a sequence based on the given list" {
         val fieldSpec: FieldSpec = FieldSpec.values(listOf("one", "two", "tre", "for", "fyv"))
-        val supplier: ValueSupplier<Any> = Suppliers.values(fieldSpec)
+        val supplier: ValueSupplier<out Any?> = Suppliers.values(fieldSpec)
 
         supplier.next(0) shouldBe "one"
         supplier.next(1) shouldBe "two"
