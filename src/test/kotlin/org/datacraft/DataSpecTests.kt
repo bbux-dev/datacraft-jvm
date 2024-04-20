@@ -35,8 +35,7 @@ class DataSpecTests : StringSpec({
             "id" to listOf(1, 2, 3),
             "name" to listOf("bob", "ann", "cara")
         )
-        val dataSpec = DataSpec.parse(fieldSpecs)
-        val generator = dataSpec.generator(5)
+        val generator = Datacraft.generator(fieldSpecs, 5)
 
         val results = mutableListOf<Map<String, Any?>>()
         for (record in generator) {
@@ -50,8 +49,8 @@ class DataSpecTests : StringSpec({
         val fieldSpecs =  mapOf(
             "id" to listOf(1, 2, 3)
         )
-        val dataSpec = DataSpec.parse(fieldSpecs)
-        val generator = dataSpec.generator(1)
+
+        val generator = Datacraft.generator(fieldSpecs, 1)
 
         // Exhaust the generator
         val first = generator.next()
@@ -67,8 +66,7 @@ class DataSpecTests : StringSpec({
             "id" to listOf(1, 2, 3),
             "name" to listOf("bob", "ann", "cara")
         )
-        val dataSpec = DataSpec.parse(fieldSpecs)
-        val generator = dataSpec.generator(1)
+        val generator = Datacraft.generator(fieldSpecs, 1)
         val record = generator.next()
 
         record.keys shouldContainAll listOf("id", "name")
@@ -81,10 +79,11 @@ class DataSpecTests : StringSpec({
             "name" to "Alice",
             "age" to 30
         )
-        val dataSpec = DataSpec.parse(fields)
+
+        val generator = Datacraft.generateRecords(fields, 3, User::class.java)
 
         // Test
-        val results = dataSpec.generateRecords(3, User::class.java).asSequence().toList()
+        val results = generator.asSequence().toList()
 
         // Assertions
         results.size shouldBe 3
