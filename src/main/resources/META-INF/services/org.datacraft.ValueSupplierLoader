@@ -1,2 +1,3 @@
 org.datacraft.loaders.DateLoader
 org.datacraft.loaders.ValuesLoader
+org.datacraft.loaders.CombineLoader

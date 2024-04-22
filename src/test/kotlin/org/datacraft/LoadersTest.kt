@@ -17,4 +17,21 @@ class LoadersTest : StringSpec({
         val supplier = loader.get("foo")
         supplier shouldNot beNull()
     }
+    "When init then discovered combine type should be discovered" {
+        val json = """
+            {
+              "foo": {"type": "combine", "refs": ["one", "two"]},
+              "refs": {
+                "one": ["alpha", "beta"],
+                "two": [1, 2]
+              }
+            }
+        """
+        assert(TestUtils.validateJson(json))
+
+        val spec: DataSpec = DataSpec.parseString(json)
+        val loader = Loaders.init(spec)
+        val supplier = loader.get("foo")
+        supplier shouldNot beNull()
+    }
 })

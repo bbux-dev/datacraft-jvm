@@ -61,13 +61,14 @@ class DataSpec(val data: Map<String, FieldSpec>) {
 
     companion object {
         /**
-         * Parses a JSON string into a `DataSpec` instance.
+         * Parses a JSON DataSpec representation into a `DataSpec` instance.
          *
-         *  @param json The JSON string to parse.
+         * @param json The JSON string to parse.
          * @return a new `DataSpec` instance based on the JSON input.
          */
         fun parseString(json: String): DataSpec {
             val processed = Preprocessor.preprocessSpec(Json.parseToJsonElement(json))
+
             @Suppress("UNCHECKED_CAST")
             val data: Map<String, Any?> = Gson().fromJson(processed, Map::class.java) as Map<String, Any?>
             return parse(data)
@@ -86,9 +87,8 @@ class DataSpec(val data: Map<String, FieldSpec>) {
         private fun parseRaw(raw: Map<String, Any?>): Map<String, FieldSpec> {
             val specs = mutableMapOf<String, FieldSpec>()
             raw.forEach { (key, value) ->
-                if (key.equals("refs", ignoreCase = true) && value is Map<*, *>) {
-                    @Suppress("UNCHECKED_CAST")
-                    specs.putAll(parseRaw(value as Map<String, Any?>))
+                if (key.equals("refs", ignoreCase = true)) {
+                    specs.putAll(parseString(value as String).data)
                 }
                 specs[key] = fieldSpecFrom(value) ?: throw SpecException("Invalid value for FieldSpec $value")
             }
@@ -108,29 +108,16 @@ class DataSpec(val data: Map<String, FieldSpec>) {
             if (value is Map<*, *>) {
                 @Suppress("UNCHECKED_CAST")
                 val spec = value as Map<String, Any?>
-                @Suppress("UNCHECKED_CAST")
-                val config = spec.getOrDefault("config", Collections.emptyMap<String, Any>()) as Map<String, Any>
-                return FieldSpec(
-                    spec["type"] as String,
-                    spec["data"],
-                    config
-                )
+
+                return FieldSpec.forType(spec["type"] as String, spec)
             }
             if (value is List<*>) {
-                return FieldSpec(
-                    "values",
-                    value,
-                    null
-                )
+                return FieldSpec.values(value)
             }
             // Handle cases for all primitive types and String
             when (value) {
                 is Int, is Long, is Float, is Double, is Byte, is Short, is Boolean, is String -> {
-                    return FieldSpec(
-                        "values",
-                        value,
-                        null
-                    )
+                    return FieldSpec.values(value)
                 }
             }
             return null

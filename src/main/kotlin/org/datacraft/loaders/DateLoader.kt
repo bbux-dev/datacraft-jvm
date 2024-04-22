@@ -11,6 +11,7 @@ class DateLoader : ValueSupplierLoader<String> {
 
     override fun load(spec: FieldSpec, loader: Loader): ValueSupplier<String> {
         val updatedConfig: MutableMap<String, Any> = spec.config?.toMutableMap() ?: mutableMapOf()
+        // TODO: update config with specifics and defaults
         return Dates.date(updatedConfig)
     }
 }

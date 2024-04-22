@@ -37,7 +37,7 @@ class Common {
      *
      * @property weights A map where keys are the values to supply and values are the weights of these values.
      */
-    class WeightedValueSupplier(private val weights: Map<Any, Any>) : ValueSupplier<Any?> {
+    class WeightedValueSupplier(private val weights: Map<Any, Any>) : ValueSupplier<Any> {
         private val cumulativeWeights: List<Pair<Any, Double>>
         private val defaultValue: Any
 

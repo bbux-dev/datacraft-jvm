@@ -1,5 +1,6 @@
 package org.datacraft
 
+import org.datacraft.suppliers.CombineSupplier
 import org.datacraft.suppliers.Common
 
 
@@ -15,22 +16,26 @@ object Suppliers {
      * @return A [ValueSupplier] instance capable of supplying values as per the [spec].
      * @throws IllegalArgumentException if the spec contains data types that are not supported.
      */
-    fun values(spec: FieldSpec): ValueSupplier<Any?> {
-        return when (spec.data) {
+    fun values(data: Any): ValueSupplier<Any> {
+        return when (data) {
             is List<*> -> {
                 @Suppress("UNCHECKED_CAST")
-                (Common.ListValueSupplier(spec.data as List<Any>))
+                (Common.ListValueSupplier(data as List<Any>))
             }
 
             is Map<*, *> -> {
                 @Suppress("UNCHECKED_CAST")
-                (Common.WeightedValueSupplier(spec.data as Map<Any, Any>))
+                (Common.WeightedValueSupplier(data as Map<Any, Any>))
             }
 
             else -> {
-                Common.ConstantValueSupplier(spec.data)
+                Common.ConstantValueSupplier(data)
             }
         }
+    }
+
+    fun combine(suppliers: List<ValueSupplier<Any>>): ValueSupplier<Any?> {
+        return CombineSupplier(suppliers)
     }
 
 }

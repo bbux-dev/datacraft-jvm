@@ -14,11 +14,20 @@ object Loaders {
 }
 
 class Loader(private val spec: DataSpec, private val mapping: MutableMap<String, ValueSupplierLoader<*>>) {
-    fun get(field: String) : ValueSupplier<out Any?> {
+
+    private val cache = mutableMapOf<String, ValueSupplier<Any>>()
+
+    fun get(field: String) : ValueSupplier<Any> {
+        // check cache first
+        cache[field]?.let { return it }
+
         val fieldSpec = spec.data[field] ?: throw SpecException("Unknown field name $field")
         val typeName = fieldSpec.type
         val loader = mapping[typeName] ?: throw SpecException("No type with name $typeName discovered")
 
-        return loader.load(fieldSpec, this)
+        val supplier = loader.load(fieldSpec, this)
+        @Suppress("UNCHECKED_CAST")
+        cache[field] = supplier as ValueSupplier<Any>
+        return supplier
     }
 }
