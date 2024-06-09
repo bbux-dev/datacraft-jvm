@@ -13,6 +13,7 @@
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
         <junit.jupiter.version>5.10.2</junit.jupiter.version>
+        <kotest-version>5.8.1</kotest-version>
     </properties>
 
     <repositories>
@@ -106,21 +107,26 @@
             <version>4.4.0</version>
         </dependency>
         <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
             <groupId>io.kotest</groupId>
             <artifactId>kotest-runner-junit5-jvm</artifactId>
-            <version>5.8.1</version>
+            <version>${kotest-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.kotest</groupId>
             <artifactId>kotest-assertions-core-jvm</artifactId>
-            <version>5.8.1</version>
+            <version>${kotest-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.kotest</groupId>
             <artifactId>kotest-framework-engine</artifactId>
-            <version>5.8.1</version>
+            <version>${kotest-version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

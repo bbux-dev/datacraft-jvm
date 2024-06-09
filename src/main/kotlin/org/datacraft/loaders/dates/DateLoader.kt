@@ -1,10 +1,11 @@
-package org.datacraft.loaders
+package org.datacraft.loaders.dates
 
 import org.datacraft.FieldSpec
 import org.datacraft.Loader
 import org.datacraft.ValueSupplier
 import org.datacraft.ValueSupplierLoader
 import org.datacraft.suppliers.Dates
+
 
 class DateLoader : ValueSupplierLoader<String> {
     override fun typeName(): String = "date"
@@ -15,3 +16,4 @@ class DateLoader : ValueSupplierLoader<String> {
         return Dates.date(updatedConfig)
     }
 }
+

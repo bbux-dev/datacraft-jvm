@@ -1,3 +1,5 @@
-org.datacraft.loaders.DateLoader
+org.datacraft.loaders.dates.DateLoader
+org.datacraft.loaders.dates.DateIsoLoader
+org.datacraft.loaders.dates.DateIsoMillisLoader
 org.datacraft.loaders.ValuesLoader
 org.datacraft.loaders.CombineLoader

@@ -16,7 +16,7 @@ class DataSpec(val data: Map<String, FieldSpec>) {
     private val gson = Gson()
 
     /**
-     * Generates an iterator over maps representing data records, each conforming to the specified field specifications.
+     * Generates an iterator of maps representing data records, each conforming to the specified field specifications.
      *
      * @param iterations the number of records to generate.
      * @return an iterator that produces a series of maps, where each map represents a data record.
@@ -59,6 +59,24 @@ class DataSpec(val data: Map<String, FieldSpec>) {
         }
     }
 
+    /**
+     * Generates a List of maps representing data records, each conforming to the specified field specifications.
+     *
+     * @param iterations the number of records to generate.
+     * @return a list of generated records
+     */
+    fun entries(iterations: Long): List<Any> {
+        return collectIterator(this.generator(iterations))
+    }
+
+    private fun <T> collectIterator(iterator: Iterator<T>): List<T> {
+        val list = mutableListOf<T>()
+        while (iterator.hasNext()) {
+            list.add(iterator.next())
+        }
+        return list
+    }
+
     companion object {
         /**
          * Parses a JSON DataSpec representation into a `DataSpec` instance.
@@ -89,8 +107,9 @@ class DataSpec(val data: Map<String, FieldSpec>) {
             raw.forEach { (key, value) ->
                 if (key.equals("refs", ignoreCase = true)) {
                     specs.putAll(parseString(value as String).data)
+                } else {
+                    specs[key] = fieldSpecFrom(value) ?: throw SpecException("Invalid value for FieldSpec $value")
                 }
-                specs[key] = fieldSpecFrom(value) ?: throw SpecException("Invalid value for FieldSpec $value")
             }
             return specs
         }

@@ -11,6 +11,11 @@ object Loaders {
         }
         return Loader(spec, mapping)
     }
+
+    fun configuredTypes() : List<String> {
+        val serviceLoader = ServiceLoader.load(ValueSupplierLoader::class.java)
+        return serviceLoader.map { e -> e.typeName() }
+    }
 }
 
 class Loader(private val spec: DataSpec, private val mapping: MutableMap<String, ValueSupplierLoader<*>>) {
