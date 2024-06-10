@@ -20,7 +20,7 @@ class ListValueSupplier<T>(private val values: List<T>) : ValueSupplier<T> {
      * @param iteration The current iteration count.
      * @return The value at the calculated index of the list.
      */
-    override fun next(iteration: Long): T = values[(iteration % values.size).toInt()]
+    override fun next(iteration: Long): T = values[((iteration - 1) % values.size).toInt()]
 }
 
 /**

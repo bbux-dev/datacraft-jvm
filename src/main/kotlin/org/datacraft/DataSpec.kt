@@ -60,21 +60,35 @@ class DataSpec(val data: Map<String, FieldSpec>) {
     }
 
     /**
+     * Generates a list of instances of a specified type, populated with data according to the field specifications.
+     *
+     * This method uses Gson to serialize each map into an instance of the specified class type. This method is useful
+     * when you need to produce data records as instances of a data class or other class types.
+     *
+     * @param iterations the number of records to generate.
+     * @param type the class of the type to which the generated records should be converted.
+     * @return a list of instances of the specified type.
+     * @throws JsonSyntaxException if JSON serialization or deserialization fails.
+     */
+    fun <T> recordEntries(iterations: Long, type: Class<T>): Iterator<T> = object : Iterator<T> {
+        private val baseIterator = generator(iterations)
+
+        override fun hasNext(): Boolean = baseIterator.hasNext()
+
+        override fun next(): T {
+            val map = baseIterator.next()
+            return gson.fromJson(gson.toJsonTree(map), type)
+        }
+    }
+
+    /**
      * Generates a List of maps representing data records, each conforming to the specified field specifications.
      *
      * @param iterations the number of records to generate.
      * @return a list of generated records
      */
-    fun entries(iterations: Long): List<Any> {
-        return collectIterator(this.generator(iterations))
-    }
-
-    private fun <T> collectIterator(iterator: Iterator<T>): List<T> {
-        val list = mutableListOf<T>()
-        while (iterator.hasNext()) {
-            list.add(iterator.next())
-        }
-        return list
+    fun entries(iterations: Long): List<Map<String, Any?>> {
+        return this.generator(iterations).asSequence().toList()
     }
 
     companion object {
@@ -106,7 +120,11 @@ class DataSpec(val data: Map<String, FieldSpec>) {
             val specs = mutableMapOf<String, FieldSpec>()
             raw.forEach { (key, value) ->
                 if (key.equals("refs", ignoreCase = true)) {
-                    specs.putAll(parseString(value as String).data)
+                    if (value is String) {
+                        specs.putAll(parseString(value).data)
+                    } else {
+                        specs.putAll(parse(value as Map<String, Any?>).data)
+                    }
                 } else {
                     specs[key] = fieldSpecFrom(value) ?: throw SpecException("Invalid value for FieldSpec $value")
                 }

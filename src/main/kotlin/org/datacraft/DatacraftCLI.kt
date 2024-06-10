@@ -1,14 +1,16 @@
 package org.datacraft
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.*
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.long
 import com.google.gson.Gson
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import org.yaml.snakeyaml.LoaderOptions
+import org.yaml.snakeyaml.Yaml
+import org.yaml.snakeyaml.constructor.Constructor
+import org.yaml.snakeyaml.nodes.Node
+import org.yaml.snakeyaml.nodes.Tag
 import java.io.File
 
 class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
@@ -56,13 +58,47 @@ class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
         }
     }
 
-    fun parseSpecString(inline: String): DataSpec {
-        return DataSpec.parseString(inline)
-    }
+    companion object {
+        fun parseSpecString(inline: String): DataSpec {
+            return DataSpec.parseString(inline)
+        }
 
-    fun loadJsonOrYaml(specPath: File): DataSpec {
-        return DataSpec.parseString(specPath.readText(Charsets.UTF_8))
+        fun loadJsonOrYaml(specPath: File): DataSpec {
+            try {
+                return DataSpec.parseString(specPath.readText(Charsets.UTF_8))
+            } catch (e: Exception) {
+                // maybe it's yaml
+                val yaml = Yaml(CustomYamlConstructor(Map::class.java))
+                val map: Map<String, Any> = yaml.load(specPath.inputStream())
+                return DataSpec.parse(map)
+            }
+        }
     }
 }
+class CustomYamlConstructor(type: Class<*>) : Constructor(type, LoaderOptions()) {
+    override fun constructObject(node: Node): Any {
+        if (node.tag == Tag.MAP) {
+            val map = super.constructObject(node) as LinkedHashMap<String, Any>
+            map.forEach { (key, value) ->
+                if (value is Map<*, *>) {
+                    map[key] = convertToNestedMap(value)
+                }
+            }
+            return map
+        }
+        return super.constructObject(node)
+    }
 
+    private fun convertToNestedMap(value: Map<*, *>): LinkedHashMap<String, Any> {
+        val nestedMap = LinkedHashMap<String, Any>()
+        value.forEach { (key, v) ->
+            if (v is Map<*, *>) {
+                nestedMap[key as String] = convertToNestedMap(v)
+            } else {
+                nestedMap[key as String] = v!!
+            }
+        }
+        return nestedMap
+    }
+}
 fun main(args: Array<String>) = DatacraftCLI().main(args)

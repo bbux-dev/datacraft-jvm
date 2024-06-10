@@ -10,12 +10,12 @@ class SuppliersTest : StringSpec({
         val supplier: ValueSupplier<Any> = Suppliers.values(data)
 
         assertSoftly {
-            supplier.next(0) shouldBe "one"
-            supplier.next(1) shouldBe "two"
-            supplier.next(2) shouldBe "tre"
-            supplier.next(3) shouldBe "for"
-            supplier.next(4) shouldBe "fyv"
-            supplier.next(5) shouldBe "one"
+            supplier.next(1) shouldBe "one"
+            supplier.next(2) shouldBe "two"
+            supplier.next(3) shouldBe "tre"
+            supplier.next(4) shouldBe "for"
+            supplier.next(5) shouldBe "fyv"
+            supplier.next(6) shouldBe "one"
         }
     }
 
@@ -28,12 +28,12 @@ class SuppliersTest : StringSpec({
         )
         val supplier = Suppliers.combine(suppliers);
         assertSoftly {
-            supplier.next(0) shouldBe "one1"
-            supplier.next(1) shouldBe "two2"
-            supplier.next(2) shouldBe "tre3"
-            supplier.next(3) shouldBe "for4"
-            supplier.next(4) shouldBe "fyv1"
-            supplier.next(5) shouldBe "one2"
+            supplier.next(1) shouldBe "one1"
+            supplier.next(2) shouldBe "two2"
+            supplier.next(3) shouldBe "tre3"
+            supplier.next(4) shouldBe "for4"
+            supplier.next(5) shouldBe "fyv1"
+            supplier.next(6) shouldBe "one2"
         }
 
     }
