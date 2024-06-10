@@ -7,13 +7,11 @@ import org.datacraft.ValueSupplierLoader
 import org.datacraft.suppliers.Dates
 
 
-class DateLoader : ValueSupplierLoader<String> {
-    override fun typeNames(): List<String> = listOf("date")
+class DateEpochMillisLoader : ValueSupplierLoader<Long> {
+    override fun typeNames(): List<String> = listOf("date.epoch.ms", "date.epoch.millis")
 
-    override fun load(spec: FieldSpec, loader: Loader): ValueSupplier<String> {
+    override fun load(spec: FieldSpec, loader: Loader): ValueSupplier<Long> {
         val updatedConfig: MutableMap<String, Any> = spec.config?.toMutableMap() ?: mutableMapOf()
-        // TODO: update config with specifics and defaults
-        return Dates.date(updatedConfig)
+        return Dates.epochDate(asMillis = true, updatedConfig)
     }
 }
-

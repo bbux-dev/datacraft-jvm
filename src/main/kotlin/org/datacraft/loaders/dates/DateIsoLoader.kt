@@ -6,10 +6,10 @@ import org.datacraft.ValueSupplier
 import org.datacraft.ValueSupplierLoader
 import org.datacraft.suppliers.Dates
 
-const val ISO_FORMAT_NO_MICRO = "YYYY-mm-yd'T'HH:MM:SS"
+const val ISO_FORMAT_NO_MICRO = "yyyy-MM-dd'T'HH:mm:ss"
 
 class DateIsoLoader : ValueSupplierLoader<String> {
-    override fun typeName(): String = "date.iso"
+    override fun typeNames(): List<String> = listOf("date.iso")
 
     override fun load(spec: FieldSpec, loader: Loader): ValueSupplier<String> {
         val updatedConfig: MutableMap<String, Any> = spec.config?.toMutableMap() ?: mutableMapOf()

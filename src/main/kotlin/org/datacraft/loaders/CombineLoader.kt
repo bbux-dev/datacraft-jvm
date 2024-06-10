@@ -3,7 +3,7 @@ package org.datacraft.loaders
 import org.datacraft.*
 
 class CombineLoader : ValueSupplierLoader<Any> {
-    override fun typeName(): String = "combine"
+    override fun typeNames(): List<String> = listOf("combine")
 
     override fun load(spec: FieldSpec, loader: Loader): ValueSupplier<Any> {
         val suppliers: MutableList<ValueSupplier<Any>> = mutableListOf()

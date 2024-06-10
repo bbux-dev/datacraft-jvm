@@ -1,6 +1,21 @@
 package org.datacraft
 
+/**
+ * Service Provider Interface for loading a ValueSupplier for a specific type.
+ *
+ * Example:
+ * ```
+ *class DateEpochMillisLoader : ValueSupplierLoader<Long> {
+ *     override fun typeNames(): List<String> = listOf("date.epoch.ms", "date.epoch.millis")
+ *
+ *     override fun load(spec: FieldSpec, loader: Loader): ValueSupplier<Long> {
+ *         val updatedConfig: MutableMap<String, Any> = spec.config?.toMutableMap() ?: mutableMapOf()
+ *         return Dates.epochDate(asMillis = true, updatedConfig)
+ *     }
+ * }
+ * ```
+ */
 interface ValueSupplierLoader<T> {
-    fun typeName() : String
+    fun typeNames() : List<String>
     fun load(spec: FieldSpec, loader: Loader): ValueSupplier<T>
 }

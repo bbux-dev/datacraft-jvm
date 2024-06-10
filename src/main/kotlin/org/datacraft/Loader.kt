@@ -7,14 +7,16 @@ object Loaders {
         val serviceLoader = ServiceLoader.load(ValueSupplierLoader::class.java)
         val mapping = mutableMapOf<String, ValueSupplierLoader<*>>()
         for (typeLoader in serviceLoader) {
-            mapping[typeLoader.typeName()] = typeLoader
+            for (name in typeLoader.typeNames()) {
+                mapping[name] = typeLoader
+            }
         }
         return Loader(spec, mapping)
     }
 
     fun configuredTypes() : List<String> {
         val serviceLoader = ServiceLoader.load(ValueSupplierLoader::class.java)
-        return serviceLoader.map { e -> e.typeName() }
+        return serviceLoader.flatMap { e -> e.typeNames() }
     }
 }
 
