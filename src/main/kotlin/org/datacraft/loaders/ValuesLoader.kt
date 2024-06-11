@@ -1,6 +1,7 @@
 package org.datacraft.loaders
 
 import org.datacraft.*
+import org.datacraft.models.ValueSupplierLoader
 
 class ValuesLoader : ValueSupplierLoader<Any> {
     override fun typeNames(): List<String> = listOf("values")

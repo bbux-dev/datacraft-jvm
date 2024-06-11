@@ -3,7 +3,7 @@ package org.datacraft.loaders.dates
 import org.datacraft.FieldSpec
 import org.datacraft.Loader
 import org.datacraft.ValueSupplier
-import org.datacraft.ValueSupplierLoader
+import org.datacraft.models.ValueSupplierLoader
 import org.datacraft.suppliers.Dates
 
 

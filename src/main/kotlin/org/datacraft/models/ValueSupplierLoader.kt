@@ -1,4 +1,8 @@
-package org.datacraft
+package org.datacraft.models
+
+import org.datacraft.FieldSpec
+import org.datacraft.Loader
+import org.datacraft.ValueSupplier
 
 /**
  * Service Provider Interface for loading a ValueSupplier for a specific type.

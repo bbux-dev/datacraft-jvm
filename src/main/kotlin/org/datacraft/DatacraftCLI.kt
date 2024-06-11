@@ -1,11 +1,15 @@
 package org.datacraft
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.parameters.options.*
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
+import com.github.ajalt.clikt.parameters.options.multiple
+import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.long
-import com.google.gson.Gson
+import org.datacraft.format.Formatters
+import org.datacraft.models.Formatter
 import org.yaml.snakeyaml.LoaderOptions
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
@@ -24,7 +28,7 @@ class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
     private val recordsPerFile by option("-r", "--records-per-file", help = "Records per file").int()
     private val printkey by option("-k", "--printkey", help = "Print field name with value").flag(default = false)
     private val logLevel by option("-l", "--log-level", help = "Logging level").default("info")
-    private val format by option("-f", "--format", help = "Formatter for output records")
+    private val format by option("-f", "--format", help = "Formatter for output records").default("json")
     private val excludeInternal by option("-x", "--exclude-internal", help = "Exclude internal fields").flag(default = false)
     private val debugSpec by option("--debug-spec", help = "Debug spec after internal reformatting").flag(default = false)
     private val debugSpecYaml by option("--debug-spec-yaml", help = "Debug spec as YAML").flag(default = false)
@@ -38,9 +42,10 @@ class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
             println(types)
             return
         }
+        val formatter : Formatter = Formatters.forType(format) ?: throw SpecException("unknown format: $format")
         val spec : DataSpec = loadSpec(spec, inline)
         val records = spec.entries(iterations)
-        println(Gson().toJson(records));
+        println(formatter.format(records));
     }
 
     fun loadSpec(specPath: File?, inline: String?, templateVars: Map<String, String> = emptyMap()): DataSpec {
