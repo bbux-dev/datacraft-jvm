@@ -10,28 +10,43 @@ import kotlin.NoSuchElementException
  *
  * @param data a map from field names to field specifications, which describe how to generate values for each field.
  */
-class DataSpec(val data: Map<String, FieldSpec>) {
+class DataSpec(
+    val data: Map<String, FieldSpec>,
+    enforceSchema: Boolean = false,
+    dataDir: String = Registries.getDefault("data_dir")
+) {
     private var count = 0L
-    private var loader = Loaders.init(this)
+    private var loader = Loaders.init(this, enforceSchema, dataDir)
     private val gson = Gson()
 
     /**
      * Generates an iterator of maps representing data records, each conforming to the specified field specifications.
      *
      * @param iterations the number of records to generate.
+     * @param output the OutputHandlerInterface to handle output operations, can be null.
+     * @param excludeInternal whether to exclude internal record metadata that is not related to the spec, defaults to false.
      * @return an iterator that produces a series of maps, where each map represents a data record.
      */
-    fun generator(iterations: Long): Iterator<Map<String, Any?>> = object : Iterator<Map<String, Any?>> {
+    fun generator(
+        iterations: Long,
+        output: OutputHandlerInterface? = null,
+        excludeInternal: Boolean = false
+    ): Iterator<Map<String, Any?>> = object : Iterator<Map<String, Any?>> {
         override fun hasNext(): Boolean = count < iterations
 
         override fun next(): Map<String, Any?> {
             if (!hasNext()) throw NoSuchElementException()
             count++
 
-            val record: MutableMap<String, Any?> = mutableMapOf()
+            val record: MutableMap<String, Any> = mutableMapOf()
             for (entry in data.entries) {
                 val value = loader.get(entry.key).next(count)
+                output?.handle(entry.key, value)
                 record[entry.key] = value
+            }
+            output?.finishedRecord(count, null, excludeInternal)
+            if (count == iterations - 1) {
+                output?.finishedIterations()
             }
             return record
         }
@@ -45,11 +60,18 @@ class DataSpec(val data: Map<String, FieldSpec>) {
      *
      * @param iterations the number of records to generate.
      * @param type the class of the type to which the generated records should be converted.
+     * @param output the OutputHandlerInterface to handle output operations, can be null.
+     * @param excludeInternal whether to exclude internal record metadata that is not related to the spec, defaults to false.
      * @return an iterator over instances of the specified type.
      * @throws JsonSyntaxException if JSON serialization or deserialization fails.
      */
-    fun <T> generateRecords(iterations: Long, type: Class<T>): Iterator<T> = object : Iterator<T> {
-        private val baseIterator = generator(iterations)
+    fun <T> generateRecords(
+        iterations: Long,
+        type: Class<T>,
+        output: OutputHandlerInterface? = null,
+        excludeInternal: Boolean = false
+    ): Iterator<T> = object : Iterator<T> {
+        private val baseIterator = generator(iterations, output, excludeInternal)
 
         override fun hasNext(): Boolean = baseIterator.hasNext()
 
@@ -70,8 +92,13 @@ class DataSpec(val data: Map<String, FieldSpec>) {
      * @return a list of instances of the specified type.
      * @throws JsonSyntaxException if JSON serialization or deserialization fails.
      */
-    fun <T> recordEntries(iterations: Long, type: Class<T>): Iterator<T> = object : Iterator<T> {
-        private val baseIterator = generator(iterations)
+    fun <T> recordEntries(
+        iterations: Long,
+        type: Class<T>,
+        output: OutputHandlerInterface? = null,
+        excludeInternal: Boolean = false
+    ): Iterator<T> = object : Iterator<T> {
+        private val baseIterator = generator(iterations, output, excludeInternal)
 
         override fun hasNext(): Boolean = baseIterator.hasNext()
 
@@ -87,8 +114,12 @@ class DataSpec(val data: Map<String, FieldSpec>) {
      * @param iterations the number of records to generate.
      * @return a list of generated records
      */
-    fun entries(iterations: Long): List<Map<String, Any?>> {
-        return this.generator(iterations).asSequence().toList()
+    fun entries(
+        iterations: Long,
+        output: OutputHandlerInterface? = null,
+        excludeInternal: Boolean = false
+    ): List<Map<String, Any?>> {
+        return this.generator(iterations, output, excludeInternal).asSequence().toList()
     }
 
     companion object {

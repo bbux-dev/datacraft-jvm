@@ -8,8 +8,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.long
-import org.datacraft.format.Formatters
-import org.datacraft.models.Formatter
+import org.datacraft.models.RecordProcessor
 import org.yaml.snakeyaml.LoaderOptions
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
@@ -21,16 +20,31 @@ class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
     private val spec by option("-s", "--spec", help = "Spec to use").file()
     private val inline by option("--inline", help = "Spec as string")
     private val iterations by option("-i", "--iterations", help = "Number of iterations to execute").long().default(100)
-    private val outdir by option("-o", "--outdir", help = "Output directory").file()
+    private val outdir by option("-o", "--outdir", help = "Output directory")
     private val outfilePrefix by option("-p", "--outfile-prefix", help = "Prefix for output files").default("output")
-    private val outfileExtension by option("-ext", "--outfile-extension", help = "Extension for output files").default(".csv")
+    private val outfileExtension by option(
+        "-ext",
+        "--outfile-extension",
+        help = "Extension for output files"
+    ).default(".csv")
     private val template by option("-t", "--template", help = "Path to template")
     private val recordsPerFile by option("-r", "--records-per-file", help = "Records per file").int()
-    private val printkey by option("-k", "--printkey", help = "Print field name with value").flag(default = false)
+    private val printKey by option("-k", "--printkey", help = "Print field name with value").flag(default = false)
     private val logLevel by option("-l", "--log-level", help = "Logging level").default("info")
-    private val format by option("-f", "--format", help = "Formatter for output records").default("json")
-    private val excludeInternal by option("-x", "--exclude-internal", help = "Exclude internal fields").flag(default = false)
-    private val debugSpec by option("--debug-spec", help = "Debug spec after internal reformatting").flag(default = false)
+    private val format by option("-f", "--format", help = "Formatter for output records")
+    private val suppressOutput by option(
+        "--suppress-output",
+        help = "Silent mode, no output other than logging produced, set --log-level off to turn off "
+    ).flag(default = false)
+    private val excludeInternal by option(
+        "-x",
+        "--exclude-internal",
+        help = "Exclude internal fields"
+    ).flag(default = false)
+    private val debugSpec by option(
+        "--debug-spec",
+        help = "Debug spec after internal reformatting"
+    ).flag(default = false)
     private val debugSpecYaml by option("--debug-spec-yaml", help = "Debug spec as YAML").flag(default = false)
     private val typeList by option("--type-list", help = "List registered types").flag(default = false)
     private val typeHelp by option("--type-help", help = "Help for registered types").multiple()
@@ -42,13 +56,23 @@ class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
             println(types)
             return
         }
-        val formatter : Formatter = Formatters.forType(format) ?: throw SpecException("unknown format: $format")
-        val spec : DataSpec = loadSpec(spec, inline)
-        val records = spec.entries(iterations)
-        println(formatter.format(records));
+        val processor: RecordProcessor? = Outputs.processor(template, format)
+        val writer: WriterInterface = Outputs.getWriter(
+            outdir = outdir,
+            outfilePrefix = outfilePrefix,
+            extension = outfileExtension,
+            suppressOutput = suppressOutput
+        )
+        val output: OutputHandlerInterface = getOutput(processor, writer)
+
+        val spec: DataSpec = loadSpec(spec, inline)
+        val gen = spec.generator(iterations, output = output, excludeInternal = excludeInternal)
+        while (gen.hasNext()) {
+            gen.next()
+        }
     }
 
-    fun loadSpec(specPath: File?, inline: String?, templateVars: Map<String, String> = emptyMap()): DataSpec {
+    private fun loadSpec(specPath: File?, inline: String?, templateVars: Map<String, String> = emptyMap()): DataSpec {
         if (specPath == null && inline == null) {
             throw SpecException("One of --spec <spec path> or --inline \"<spec string>\" must be specified")
         }
@@ -60,6 +84,15 @@ class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
             parseSpecString(inline)
         } else {
             loadJsonOrYaml(specPath!!)
+        }
+    }
+
+    fun getOutput(processor: RecordProcessor?, writer: WriterInterface): OutputHandlerInterface {
+        val numRecords = recordsPerFile ?: Int.MAX_VALUE
+        return if (processor != null) {
+            Outputs.recordLevel(processor, writer, numRecords)
+        } else {
+            Outputs.singleField(writer, printKey)
         }
     }
 
@@ -80,6 +113,7 @@ class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
         }
     }
 }
+
 class CustomYamlConstructor(type: Class<*>) : Constructor(type, LoaderOptions()) {
     override fun constructObject(node: Node): Any {
         if (node.tag == Tag.MAP) {
@@ -106,4 +140,5 @@ class CustomYamlConstructor(type: Class<*>) : Constructor(type, LoaderOptions())
         return nestedMap
     }
 }
+
 fun main(args: Array<String>) = DatacraftCLI().main(args)

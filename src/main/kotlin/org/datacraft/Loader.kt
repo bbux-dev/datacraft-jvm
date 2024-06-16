@@ -4,7 +4,7 @@ import org.datacraft.models.ValueSupplierLoader
 import java.util.*
 
 object Loaders {
-    fun init(spec: DataSpec) : Loader {
+    fun init(spec: DataSpec, enforceSchema: Boolean = false, dataDir: String? = null) : Loader {
         val serviceLoader = ServiceLoader.load(ValueSupplierLoader::class.java)
         val mapping = mutableMapOf<String, ValueSupplierLoader<*>>()
         for (typeLoader in serviceLoader) {
@@ -12,7 +12,7 @@ object Loaders {
                 mapping[name] = typeLoader
             }
         }
-        return Loader(spec, mapping)
+        return Loader(spec, mapping, enforceSchema, dataDir)
     }
 
     fun configuredTypes() : List<String> {
@@ -21,7 +21,10 @@ object Loaders {
     }
 }
 
-class Loader(private val spec: DataSpec, private val mapping: MutableMap<String, ValueSupplierLoader<*>>) {
+class Loader(private val spec: DataSpec,
+             private val mapping: MutableMap<String, ValueSupplierLoader<*>>,
+             private val enforceSchema: Boolean = false,
+             val dataDir: String?) {
 
     private val cache = mutableMapOf<String, ValueSupplier<Any>>()
 
