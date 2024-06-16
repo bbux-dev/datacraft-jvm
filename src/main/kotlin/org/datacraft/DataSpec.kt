@@ -12,6 +12,7 @@ import kotlin.NoSuchElementException
  */
 class DataSpec(
     val data: Map<String, FieldSpec>,
+    val refs: Map<String, FieldSpec>,
     enforceSchema: Boolean = false,
     dataDir: String = Registries.getDefault("data_dir")
 ) {
@@ -144,23 +145,25 @@ class DataSpec(
          * @return a new `DataSpec` instance based on the parsed field specifications.
          */
         fun parse(raw: Map<String, Any?>): DataSpec {
-            return DataSpec(parseRaw(raw))
+            val parsed = parseRaw(raw)
+            return DataSpec(parsed.first, parsed.second)
         }
 
-        private fun parseRaw(raw: Map<String, Any?>): Map<String, FieldSpec> {
+        private fun parseRaw(raw: Map<String, Any?>): Pair<MutableMap<String, FieldSpec>, MutableMap<String, FieldSpec>> {
             val specs = mutableMapOf<String, FieldSpec>()
+            val refs = mutableMapOf<String, FieldSpec>()
             raw.forEach { (key, value) ->
                 if (key.equals("refs", ignoreCase = true)) {
                     if (value is String) {
-                        specs.putAll(parseString(value).data)
+                        refs.putAll(parseString(value).data)
                     } else {
-                        specs.putAll(parse(value as Map<String, Any?>).data)
+                        refs.putAll(parse(value as Map<String, Any?>).data)
                     }
                 } else {
                     specs[key] = fieldSpecFrom(value) ?: throw SpecException("Invalid value for FieldSpec $value")
                 }
             }
-            return specs
+            return Pair(specs, refs)
         }
 
         /**

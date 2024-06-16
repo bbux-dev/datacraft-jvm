@@ -8,12 +8,16 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.long
+import kotlinx.serialization.json.Json
 import org.datacraft.models.RecordProcessor
 import org.yaml.snakeyaml.LoaderOptions
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
 import org.yaml.snakeyaml.nodes.Node
 import org.yaml.snakeyaml.nodes.Tag
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import org.yaml.snakeyaml.DumperOptions
 import java.io.File
 
 class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
@@ -56,6 +60,11 @@ class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
             println(types)
             return
         }
+        if (debugSpec or debugSpecYaml) {
+            printPreprocessedSpec()
+            return
+        }
+        val spec: DataSpec = loadSpec(spec, inline)
         val processor: RecordProcessor? = Outputs.processor(template, format)
         val writer: WriterInterface = Outputs.getWriter(
             outdir = outdir,
@@ -64,11 +73,46 @@ class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
             suppressOutput = suppressOutput
         )
         val output: OutputHandlerInterface = getOutput(processor, writer)
-
-        val spec: DataSpec = loadSpec(spec, inline)
         val gen = spec.generator(iterations, output = output, excludeInternal = excludeInternal)
         while (gen.hasNext()) {
             gen.next()
+        }
+    }
+
+    private fun printPreprocessedSpec() {
+        if (spec == null && inline == null) {
+            throw SpecException("One of --spec <spec path> or --inline \"<spec string>\" must be specified")
+        }
+        val json : String = if (inline != null) {
+            inline as String
+        } else {
+            spec!!.readText(Charsets.UTF_8)
+        }
+        val processed = Preprocessor.preprocessSpec(Json.parseToJsonElement(json), pretty = true)
+        if (debugSpec) {
+            println(processed)
+        } else {
+            // Parse JSON string into a Map using Gson
+            val gson = Gson()
+            val mapType = object : TypeToken<Map<String, Any>>() {}.type
+            val data: Map<String, Any> = gson.fromJson(processed, mapType)
+
+            // Create DumperOptions for pretty printing
+            val options = DumperOptions().apply {
+                defaultFlowStyle = DumperOptions.FlowStyle.BLOCK
+                indent = 2
+                indicatorIndent = 1
+                width = 100
+            }
+
+            // Create Yaml instance with the options
+            val yaml = Yaml(options)
+
+            // Convert Map to YAML string
+            val yamlString = yaml.dump(data)
+
+            // Print the YAML string
+            println(yamlString)
         }
     }
 

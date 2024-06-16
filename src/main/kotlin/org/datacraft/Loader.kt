@@ -32,7 +32,7 @@ class Loader(private val spec: DataSpec,
         // check cache first
         cache[field]?.let { return it }
 
-        val fieldSpec = spec.data[field] ?: throw SpecException("Unknown field name $field")
+        val fieldSpec = spec.data[field] ?: spec.refs[field] ?: throw SpecException("Unknown field name $field")
         val typeName = fieldSpec.type
         val loader = mapping[typeName] ?: throw SpecException("No type with name $typeName discovered")
 
