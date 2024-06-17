@@ -9,6 +9,10 @@ class DataSpecTransformTests : StringSpec({
 
     val testCases = listOf(
         Pair(
+            """{"vals:range": [1, 4]}""",
+            """{"vals": {"type": "range", "data": [1, 4]}}"""
+        ),
+        Pair(
             """{"name": [1, 2, 3, 4, 5]}""",
             """{"name": {"type": "values", "data": [1, 2, 3, 4, 5]}}"""
         ),

@@ -159,7 +159,7 @@ object Preprocessor {
         }
         val transformedSpec = if (isSpecData(spec, specType)) {
             buildJsonObject {
-                put("type", "values")
+                put("type", specType ?: "values")
                 put("data", spec)
             }
         } else {

@@ -1,6 +1,7 @@
 package org.datacraft
 
 import org.datacraft.models.ValueSupplierLoader
+import org.datacraft.suppliers.DecoratedSupplier
 import java.util.*
 
 object Loaders {
@@ -36,9 +37,15 @@ class Loader(private val spec: DataSpec,
         val typeName = fieldSpec.type
         val loader = mapping[typeName] ?: throw SpecException("No type with name $typeName discovered")
 
-        val supplier = loader.load(fieldSpec, this)
+        var supplier = loader.load(fieldSpec, this)
+        val config: Map<String, Any> = fieldSpec.config ?: mapOf()
+        if (isDecorated(config)) {
+           supplier = DecoratedSupplier(supplier = supplier, config = config)
+        }
         @Suppress("UNCHECKED_CAST")
         cache[field] = supplier as ValueSupplier<Any>
         return supplier
     }
+
+    private fun isDecorated(config: Map<String, Any>) = config.containsKey("prefix") || config.containsKey("suffix")
 }
