@@ -1,6 +1,9 @@
 package org.datacraft
 
-import org.datacraft.suppliers.*
+import org.datacraft.suppliers.CombineSupplier
+import org.datacraft.suppliers.ConstantValueSupplier
+import org.datacraft.suppliers.ListValueSupplier
+import org.datacraft.suppliers.WeightedValueSupplier
 
 
 object Suppliers {

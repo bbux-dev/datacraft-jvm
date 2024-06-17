@@ -3,10 +3,6 @@ package org.datacraft.suppliers
 import org.datacraft.ValueSupplier
 import kotlin.random.Random
 
-private class Common {
-   // just for holding other classes
-}
-
 /**
  * A [ValueSupplier] that supplies values from a predefined list. Each call to [next] returns the next value in the list,
  * cycling back to the beginning of the list when the end is reached.

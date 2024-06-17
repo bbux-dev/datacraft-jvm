@@ -1,7 +1,5 @@
 package org.datacraft.format
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import org.datacraft.models.Formatter
 
 

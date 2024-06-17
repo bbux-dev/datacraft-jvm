@@ -1,5 +1,5 @@
 package org.datacraft.models
-import java.util.Random
+import java.util.*
 
 /**
  * Represents a distribution of values. Implementations of this interface provide mechanisms to generate random values based on specific distributions.

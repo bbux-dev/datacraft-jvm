@@ -11,7 +11,7 @@ import org.datacraft.models.Formatter
  */
 class JsonFormatterPretty : Formatter {
     private val gson: Gson = GsonBuilder().setPrettyPrinting().create()
-    override fun name(): String = "json-pretty";
+    override fun name(): String = "json-pretty"
 
     /**
      * Formats the given record as a JSON string.

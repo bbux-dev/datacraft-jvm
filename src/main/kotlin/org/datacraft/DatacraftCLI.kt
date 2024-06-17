@@ -8,16 +8,16 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.long
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.serialization.json.Json
 import org.datacraft.models.RecordProcessor
+import org.yaml.snakeyaml.DumperOptions
 import org.yaml.snakeyaml.LoaderOptions
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
 import org.yaml.snakeyaml.nodes.Node
 import org.yaml.snakeyaml.nodes.Tag
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import org.yaml.snakeyaml.DumperOptions
 import java.io.File
 
 class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
@@ -131,7 +131,7 @@ class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
         }
     }
 
-    fun getOutput(processor: RecordProcessor?, writer: WriterInterface): OutputHandlerInterface {
+    private fun getOutput(processor: RecordProcessor?, writer: WriterInterface): OutputHandlerInterface {
         val numRecords = recordsPerFile ?: Int.MAX_VALUE
         return if (processor != null) {
             Outputs.recordLevel(processor, writer, numRecords)
