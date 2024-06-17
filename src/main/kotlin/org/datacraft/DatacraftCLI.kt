@@ -3,7 +3,6 @@ package org.datacraft
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
-import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
@@ -51,7 +50,6 @@ class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
     ).flag(default = false)
     private val debugSpecYaml by option("--debug-spec-yaml", help = "Debug spec as YAML").flag(default = false)
     private val typeList by option("--type-list", help = "List registered types").flag(default = false)
-    private val typeHelp by option("--type-help", help = "Help for registered types").multiple()
 
     override fun run() {
         // these bypass spec loading
