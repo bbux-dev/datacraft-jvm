@@ -1,0 +1,4 @@
+org.datacraft.casters.FloatCaster
+org.datacraft.casters.HexCaster
+org.datacraft.casters.IntCaster
+org.datacraft.casters.StringCaster

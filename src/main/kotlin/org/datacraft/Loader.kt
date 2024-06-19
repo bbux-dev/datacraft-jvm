@@ -1,6 +1,7 @@
 package org.datacraft
 
 import org.datacraft.models.ValueSupplierLoader
+import org.datacraft.suppliers.CastSupplier
 import org.datacraft.suppliers.DecoratedSupplier
 import java.util.*
 
@@ -39,6 +40,10 @@ class Loader(private val spec: DataSpec,
 
         var supplier = loader.load(fieldSpec, this)
         val config: Map<String, Any> = fieldSpec.config ?: mapOf()
+        if (config.containsKey("cast")) {
+            val caster = Registries.casterFor(config["cast"] as String)
+            supplier = CastSupplier(supplier as ValueSupplier<Any>, caster)
+        }
         if (isDecorated(config)) {
            supplier = DecoratedSupplier(supplier = supplier, config = config)
         }
