@@ -5,5 +5,6 @@ org.datacraft.casters.StringCaster
 org.datacraft.casters.LowerCaster
 org.datacraft.casters.UpperCaster
 org.datacraft.casters.TrimCaster
-#custom handling due to constructor
+#custom handling due to constructors
 #org.datacraft.casters.RoundCaster
+#org.datacraft.casters.ZFillCaster

@@ -30,6 +30,11 @@ class CastSupplierTest : StringSpec({
         Triple("round3", 7.7654321, 7.765),
         Triple("round4", 7.7654321, 7.7654),
         Triple("round5", 7.7654321, 7.76543),
+        Triple("zfill0", 1, "1"),
+        Triple("zfill2", 1.1, "001.1"),
+        Triple("zfill3", 1.23, "0001.23"),
+        Triple("zfill5", "A", "00000A"),
+        Triple("zfill8", 1, "000000001"),
     )
 
     validTestCases.forEachIndexed { index, (type, input, expected) ->

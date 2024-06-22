@@ -1,12 +1,13 @@
 package org.datacraft
 
+import org.datacraft.casters.MultiCaster
 import org.datacraft.models.ValueSupplierLoader
 import org.datacraft.suppliers.CastSupplier
 import org.datacraft.suppliers.DecoratedSupplier
 import java.util.*
 
 object Loaders {
-    fun init(spec: DataSpec, enforceSchema: Boolean = false, dataDir: String? = null) : Loader {
+    fun init(spec: DataSpec, enforceSchema: Boolean = false, dataDir: String? = null): Loader {
         val serviceLoader = ServiceLoader.load(ValueSupplierLoader::class.java)
         val mapping = mutableMapOf<String, ValueSupplierLoader<*>>()
         for (typeLoader in serviceLoader) {
@@ -17,20 +18,22 @@ object Loaders {
         return Loader(spec, mapping, enforceSchema, dataDir)
     }
 
-    fun configuredTypes() : List<String> {
+    fun configuredTypes(): List<String> {
         val serviceLoader = ServiceLoader.load(ValueSupplierLoader::class.java)
         return serviceLoader.flatMap { e -> e.typeNames() }
     }
 }
 
-class Loader(private val spec: DataSpec,
-             private val mapping: MutableMap<String, ValueSupplierLoader<*>>,
-             private val enforceSchema: Boolean = false,
-             val dataDir: String?) {
+class Loader(
+    private val spec: DataSpec,
+    private val mapping: MutableMap<String, ValueSupplierLoader<*>>,
+    private val enforceSchema: Boolean = false,
+    val dataDir: String?
+) {
 
     private val cache = mutableMapOf<String, ValueSupplier<Any>>()
 
-    fun get(field: String) : ValueSupplier<Any> {
+    fun get(field: String): ValueSupplier<Any> {
         // check cache first
         cache[field]?.let { return it }
 
@@ -41,11 +44,16 @@ class Loader(private val spec: DataSpec,
         var supplier = loader.load(fieldSpec, this)
         val config: Map<String, Any> = fieldSpec.config ?: mapOf()
         if (config.containsKey("cast")) {
-            val caster = Registries.casterFor(config["cast"] as String)
-            supplier = CastSupplier(supplier as ValueSupplier<Any>, caster)
+            val names = (config["cast"] as String).split(";")
+            val casters = names.map { Registries.casterFor(it) }
+            supplier = if (casters.size > 1) {
+                CastSupplier(supplier as ValueSupplier<Any>, MultiCaster(casters))
+            } else {
+                CastSupplier(supplier as ValueSupplier<Any>, casters[0])
+            }
         }
         if (isDecorated(config)) {
-           supplier = DecoratedSupplier(supplier = supplier, config = config)
+            supplier = DecoratedSupplier(supplier = supplier, config = config)
         }
         @Suppress("UNCHECKED_CAST")
         cache[field] = supplier as ValueSupplier<Any>
