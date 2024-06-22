@@ -20,7 +20,16 @@ class CastSupplierTest : StringSpec({
         Triple("int", "123.45", 123),
         Triple("float", "123.45", 123.45f),
         Triple("string", 123.45, "123.45"),
-        Triple("hex", "255", "ff")
+        Triple("hex", "255", "ff"),
+        Triple("lower", "dAtAcRaFt", "datacraft"),
+        Triple("upper", "dAtAcRaFt", "DATACRAFT"),
+        Triple("trim", " datacraft ", "datacraft"),
+        Triple("round0", 7.7654321, 8.0),
+        Triple("round1", 7.7654321, 7.8),
+        Triple("round2", 7.7654321, 7.77),
+        Triple("round3", 7.7654321, 7.765),
+        Triple("round4", 7.7654321, 7.7654),
+        Triple("round5", 7.7654321, 7.76543),
     )
 
     validTestCases.forEachIndexed { index, (type, input, expected) ->

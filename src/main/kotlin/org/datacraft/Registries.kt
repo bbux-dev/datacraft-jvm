@@ -1,6 +1,7 @@
 package org.datacraft
 
 import org.datacraft.annotations.CastName
+import org.datacraft.casters.RoundCaster
 import org.datacraft.models.Caster
 import org.datacraft.models.ValueSupplierLoader
 import java.util.*
@@ -22,6 +23,10 @@ object Registries {
             val annotation = caster::class.annotations.filterIsInstance<CastName>().firstOrNull()
                 ?: throw SpecException("Caster ${caster::class.simpleName} is missing @CastName annotation")
             casters[annotation.value] = caster as Caster<Any>
+        }
+        // special for round casters
+        for (i in 0..10) {
+            casters["round$i"] = RoundCaster(i) as Caster<Any>
         }
     }
 
