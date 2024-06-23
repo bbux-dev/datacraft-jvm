@@ -71,9 +71,13 @@ class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
             suppressOutput = suppressOutput
         )
         val output: OutputHandlerInterface = getOutput(processor, writer)
-        val gen = spec.generator(iterations, output = output, excludeInternal = excludeInternal)
-        while (gen.hasNext()) {
-            gen.next()
+        try {
+            val gen = spec.generator(iterations, output = output, excludeInternal = excludeInternal)
+            while (gen.hasNext()) {
+                gen.next()
+            }
+        } catch (e: Exception) {
+            println("${e.message}")
         }
     }
 
@@ -116,10 +120,10 @@ class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
 
     private fun loadSpec(specPath: File?, inline: String?, templateVars: Map<String, String> = emptyMap()): DataSpec {
         if (specPath == null && inline == null) {
-            throw SpecException("One of --spec <spec path> or --inline \"<spec string>\" must be specified")
+            throw SpecException("One of --spec <spec path> or --inline \"{spec string}\" must be specified")
         }
         if (specPath != null && inline != null) {
-            throw SpecException("Only one of --spec <spec path> or --inline \"<spec string>\" must be specified")
+            throw SpecException("Only one of --spec <spec path> or --inline \"{spec string}\" must be specified")
         }
 
         return if (inline != null) {

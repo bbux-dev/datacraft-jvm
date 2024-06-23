@@ -59,10 +59,11 @@ object Suppliers {
      *
      * @param start The starting value of the range (inclusive).
      * @param end The ending value of the range (exclusive).
+     * @param step The increment size between iterations (default is 1)
      * @return Returns a `ValueSupplier<Any>` that supplies integer values within the specified range.
      */
-    fun range(start: Int, end: Int): ValueSupplier<Any> {
-        return RangeSupplier(start, end)
+    fun range(start: Int, end: Int, step: Int): ValueSupplier<Any> {
+        return RangeSupplier(start, end, step)
     }
 
     fun randomRange(start: Double, end: Double): ValueSupplier<Any> {

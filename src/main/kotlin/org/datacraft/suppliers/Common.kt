@@ -10,14 +10,18 @@ import kotlin.random.Random
  * @param T The type of values in the list.
  * @property values The list of values to supply.
  */
-class ListValueSupplier<T>(private val values: List<T>) : ValueSupplier<T> {
-    /**
-     * Returns the value at the current iteration's index within the list, cycling through the list if necessary.
-     * @param iteration The current iteration count.
-     * @return The value at the calculated index of the list.
-     */
-    override fun next(iteration: Long): T = values[((iteration - 1) % values.size).toInt()]
-}
+    class ListValueSupplier<T>(private val values: List<T>) : ValueSupplier<T> {
+        /**
+         * Returns the value at the current iteration's index within the list, cycling through the list if necessary.
+         * @param iteration The current iteration count.
+         * @return The value at the calculated index of the list.
+         */
+        override fun next(iteration: Long): T {
+            // to correct for zero based indexes
+            val adjustedIteration = if (iteration == 0L) 0 else iteration - 1
+            return values[(adjustedIteration % values.size).toInt()]
+        }
+    }
 
 /**
  * Supplies a constant value for every call.

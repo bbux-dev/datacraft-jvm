@@ -129,9 +129,9 @@ class RecordLevelOutput(
     }
 
     override fun finishedRecord(iteration: Long?, groupName: String?, excludeInternal: Boolean) {
-        val currentRecord = current.toMap()
+        val currentRecord = current.toMutableMap()
         if (!excludeInternal) {
-            (currentRecord as MutableMap)["_internal"] = mapOf(
+            currentRecord["_internal"] = mapOf(
                 "_iteration" to iteration,
                 "_field_group" to groupName
             )
