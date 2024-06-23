@@ -1,19 +1,31 @@
 package org.datacraft
 
+import org.datacraft.models.ValueSupplierLoader
+import org.datacraft.suppliers.DecoratedSupplier
 import java.util.*
 
 object Loaders {
-    fun init(spec: DataSpec) : Loader {
+    fun init(spec: DataSpec, enforceSchema: Boolean = false, dataDir: String? = null) : Loader {
         val serviceLoader = ServiceLoader.load(ValueSupplierLoader::class.java)
         val mapping = mutableMapOf<String, ValueSupplierLoader<*>>()
         for (typeLoader in serviceLoader) {
-            mapping[typeLoader.typeName()] = typeLoader
+            for (name in typeLoader.typeNames()) {
+                mapping[name] = typeLoader
+            }
         }
-        return Loader(spec, mapping)
+        return Loader(spec, mapping, enforceSchema, dataDir)
+    }
+
+    fun configuredTypes() : List<String> {
+        val serviceLoader = ServiceLoader.load(ValueSupplierLoader::class.java)
+        return serviceLoader.flatMap { e -> e.typeNames() }
     }
 }
 
-class Loader(private val spec: DataSpec, private val mapping: MutableMap<String, ValueSupplierLoader<*>>) {
+class Loader(private val spec: DataSpec,
+             private val mapping: MutableMap<String, ValueSupplierLoader<*>>,
+             private val enforceSchema: Boolean = false,
+             val dataDir: String?) {
 
     private val cache = mutableMapOf<String, ValueSupplier<Any>>()
 
@@ -21,13 +33,19 @@ class Loader(private val spec: DataSpec, private val mapping: MutableMap<String,
         // check cache first
         cache[field]?.let { return it }
 
-        val fieldSpec = spec.data[field] ?: throw SpecException("Unknown field name $field")
+        val fieldSpec = spec.data[field] ?: spec.refs[field] ?: throw SpecException("Unknown field name $field")
         val typeName = fieldSpec.type
         val loader = mapping[typeName] ?: throw SpecException("No type with name $typeName discovered")
 
-        val supplier = loader.load(fieldSpec, this)
+        var supplier = loader.load(fieldSpec, this)
+        val config: Map<String, Any> = fieldSpec.config ?: mapOf()
+        if (isDecorated(config)) {
+           supplier = DecoratedSupplier(supplier = supplier, config = config)
+        }
         @Suppress("UNCHECKED_CAST")
         cache[field] = supplier as ValueSupplier<Any>
         return supplier
     }
+
+    private fun isDecorated(config: Map<String, Any>) = config.containsKey("prefix") || config.containsKey("suffix")
 }

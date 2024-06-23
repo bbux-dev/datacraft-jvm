@@ -3,10 +3,6 @@ package org.datacraft.suppliers
 import org.datacraft.ValueSupplier
 import kotlin.random.Random
 
-private class Common {
-   // just for holding other classes
-}
-
 /**
  * A [ValueSupplier] that supplies values from a predefined list. Each call to [next] returns the next value in the list,
  * cycling back to the beginning of the list when the end is reached.
@@ -20,7 +16,7 @@ class ListValueSupplier<T>(private val values: List<T>) : ValueSupplier<T> {
      * @param iteration The current iteration count.
      * @return The value at the calculated index of the list.
      */
-    override fun next(iteration: Long): T = values[(iteration % values.size).toInt()]
+    override fun next(iteration: Long): T = values[((iteration - 1) % values.size).toInt()]
 }
 
 /**

@@ -1,6 +1,6 @@
 package org.datacraft
 
-import java.util.Collections
+import java.util.*
 
 /**
  * Represents the specification for a field, including its type, data, and configuration.
@@ -11,10 +11,10 @@ import java.util.Collections
  */
 sealed class FieldSpec(val type: String, val data: Any?, val config: Map<String, Any>?) {
 
-    class BasicFieldSpec(type: String, data: Any?, config: Map<String, Any>?) : FieldSpec(type, data, config) {}
+    class BasicFieldSpec(type: String, data: Any?, config: Map<String, Any>?) : FieldSpec(type, data, config)
     companion object {
 
-        fun basic(type: String, data: Any?, config: Map<String, Any>): FieldSpec {
+        private fun basic(type: String, data: Any?, config: Map<String, Any>): FieldSpec {
             return BasicFieldSpec(type, data, config)
         }
         /**
@@ -47,7 +47,7 @@ sealed class FieldSpec(val type: String, val data: Any?, val config: Map<String,
             return BasicFieldSpec("values", data, Collections.emptyMap())
         }
 
-        fun forType(type: String, rawSpec: Map<String, Any?>): FieldSpec? {
+        fun forType(type: String, rawSpec: Map<String, Any?>): FieldSpec {
             @Suppress("UNCHECKED_CAST")
             val config = rawSpec.getOrDefault("config", Collections.emptyMap<String, Any>()) as Map<String, Any>
             if (type == "combine") {

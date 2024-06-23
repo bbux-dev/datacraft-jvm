@@ -51,5 +51,22 @@ object Suppliers {
         return CombineSupplier(suppliers, joinWith, asList)
     }
 
+    /**
+     * Creates a `RangeSupplier` that generates values within a specified range.
+     *
+     * This function produces a `ValueSupplier` that generates integer values from the specified `start` to `end`.
+     * The `start` value is inclusive, while the `end` value is also inclusive.
+     *
+     * @param start The starting value of the range (inclusive).
+     * @param end The ending value of the range (exclusive).
+     * @return Returns a `ValueSupplier<Any>` that supplies integer values within the specified range.
+     */
+    fun range(start: Int, end: Int): ValueSupplier<Any> {
+        return RangeSupplier(start, end)
+    }
+
+    fun randomRange(start: Double, end: Double): ValueSupplier<Any> {
+        return RandomRangeSupplier(start, end)
+    }
 
 }

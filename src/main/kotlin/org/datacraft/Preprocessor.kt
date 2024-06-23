@@ -7,7 +7,7 @@ object Preprocessor {
     /**
      *
      */
-    fun preprocessSpec(rawSpec: JsonElement): String {
+    fun preprocessSpec(rawSpec: JsonElement, pretty: Boolean = false): String {
         // Check if the input is a JsonObject
         if (rawSpec !is JsonObject)
             throw SpecException(
@@ -20,7 +20,7 @@ object Preprocessor {
                 when {
                     key == "refs" -> {
                         // Call a function to preprocess the 'refs' and add to updatedSpecs
-                        put(key, preprocessSpec(spec))
+                        put(key, Json.parseToJsonElement(preprocessSpec(spec)))
                     }
 
                     key == "field_groups" -> {
@@ -40,7 +40,8 @@ object Preprocessor {
                 }
             }
         }
-        return Json.encodeToString(JsonElement.serializer(), updatedSpec)
+        val encoder = Json { prettyPrint = pretty }
+        return encoder.encodeToString(JsonElement.serializer(), updatedSpec)
     }
 
     /**
@@ -158,7 +159,7 @@ object Preprocessor {
         }
         val transformedSpec = if (isSpecData(spec, specType)) {
             buildJsonObject {
-                put("type", "values")
+                put("type", specType ?: "values")
                 put("data", spec)
             }
         } else {
