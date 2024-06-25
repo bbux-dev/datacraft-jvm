@@ -70,4 +70,14 @@ object Suppliers {
         return RandomRangeSupplier(start, end)
     }
 
+    class FunctionSupplier<T>(private val function: (Long) -> T) : ValueSupplier<T> {
+        override fun next(iteration: Long): T {
+            return function(iteration)
+        }
+    }
+
+    fun <T> functionSupplier(function: (Long) -> T): ValueSupplier<T> {
+        return FunctionSupplier(function)
+    }
+
 }

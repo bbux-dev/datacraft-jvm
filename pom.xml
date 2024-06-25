@@ -16,6 +16,7 @@
         <junit.jupiter.version>5.10.2</junit.jupiter.version>
         <kotest-version>5.8.1</kotest-version>
         <kotlin.version>2.0.0</kotlin.version>
+        <mockkVersion>1.13.11</mockkVersion>
     </properties>
 
     <repositories>
@@ -72,6 +73,12 @@
             <groupId>io.kotest</groupId>
             <artifactId>kotest-framework-engine</artifactId>
             <version>${kotest-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.mockk</groupId>
+            <artifactId>mockk-jvm</artifactId>
+            <version>${mockkVersion}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

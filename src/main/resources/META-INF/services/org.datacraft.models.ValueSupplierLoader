@@ -7,3 +7,4 @@ org.datacraft.loaders.ValuesLoader
 org.datacraft.loaders.CombineLoader
 org.datacraft.loaders.RangeLoader
 org.datacraft.loaders.RandomRangeLoader
+org.datacraft.loaders.UuidLoader

@@ -33,6 +33,18 @@ class LoaderTest : StringSpec({
         supplier shouldNot beNull()
         supplier.next(1) shouldNot beNull()
     }
+    "When init then uuid type should be discovered" {
+        val json = """
+            {
+              "foo:uuid": {}
+            }
+        """
+        assert(TestUtils.validateJson(json))
+
+        val supplier = supplierForSpec(json, "foo")
+        supplier shouldNot beNull()
+        supplier.next(1) shouldNot beNull()
+    }
     "When spec configured with cast and prefix value should be correct" {
         val json = """
             {
