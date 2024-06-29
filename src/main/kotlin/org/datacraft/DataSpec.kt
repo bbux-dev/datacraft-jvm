@@ -27,6 +27,7 @@ class DataSpec(
      * @param excludeInternal whether to exclude internal record metadata that is not related to the spec, defaults to false.
      * @return an iterator that produces a series of maps, where each map represents a data record.
      */
+    @JvmOverloads
     fun generator(
         iterations: Long,
         output: OutputHandlerInterface? = null,
@@ -65,6 +66,7 @@ class DataSpec(
      * @return an iterator over instances of the specified type.
      * @throws JsonSyntaxException if JSON serialization or deserialization fails.
      */
+    @JvmOverloads
     fun <T> generateRecords(
         iterations: Long,
         type: Class<T>,
@@ -92,6 +94,7 @@ class DataSpec(
      * @return a list of instances of the specified type.
      * @throws JsonSyntaxException if JSON serialization or deserialization fails.
      */
+    @JvmOverloads
     fun <T> recordEntries(
         iterations: Long,
         type: Class<T>,
@@ -114,6 +117,7 @@ class DataSpec(
      * @param iterations the number of records to generate.
      * @return a list of generated records
      */
+    @JvmOverloads
     fun entries(
         iterations: Long,
         output: OutputHandlerInterface? = null,
@@ -174,7 +178,7 @@ class DataSpec(
          * @param value The value to convert into a `FieldSpec`.
          * @return a `FieldSpec` corresponding to the provided value or `null` if the value cannot be converted.
          */
-        private fun fieldSpecFrom(value: Any?): FieldSpec? {
+        fun fieldSpecFrom(value: Any?): FieldSpec? {
             if (value is Map<*, *>) {
                 @Suppress("UNCHECKED_CAST")
                 val spec = value as Map<String, Any?>

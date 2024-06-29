@@ -117,7 +117,7 @@ object Preprocessor {
      * @param fieldName The field name in URL-like format.
      * @return Triple containing the new key, optional type, and a map of parameters.
      */
-    private fun parseKey(fieldName: String): Triple<String, String?, Map<String, String>> {
+    fun parseKey(fieldName: String): Triple<String, String?, Map<String, String>> {
         val parts = fieldName.split("?", limit = 2)
         val keyType = parts[0].split(":", limit = 2)
         val parsedQuery = if (parts.size > 1) parseQuery(parts[1]) else emptyMap()
