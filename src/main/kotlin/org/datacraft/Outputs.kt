@@ -96,7 +96,7 @@ interface OutputHandlerInterface {
     fun finishedIterations()
 }
 
-class SingleFieldOutput(private val writer: WriterInterface, private val outputKey: Boolean) : OutputHandlerInterface {
+internal class SingleFieldOutput(private val writer: WriterInterface, private val outputKey: Boolean) : OutputHandlerInterface {
 
     override fun handle(key: String, value: Any) {
         if (outputKey) {
@@ -115,7 +115,7 @@ class SingleFieldOutput(private val writer: WriterInterface, private val outputK
     }
 }
 
-class RecordLevelOutput(
+internal class RecordLevelOutput(
     private val recordProcessor: RecordProcessor,
     private val writer: WriterInterface,
     private val recordsPerFile: Int
@@ -160,19 +160,19 @@ class RecordLevelOutput(
     }
 }
 
-class StdOutWriter : WriterInterface {
+internal class StdOutWriter : WriterInterface {
     override fun write(value: String) {
         println(value)
     }
 }
 
-class SuppressOutputWriter : WriterInterface {
+internal class SuppressOutputWriter : WriterInterface {
     override fun write(value: String) {
         // No implementation needed
     }
 }
 
-class SingleFileWriter(private val outdir: String, private val outname: String, private val overwrite: Boolean) :
+internal class SingleFileWriter(private val outdir: String, private val outname: String, private val overwrite: Boolean) :
     WriterInterface {
 
     override fun write(value: String) {
@@ -183,7 +183,7 @@ class SingleFileWriter(private val outdir: String, private val outname: String, 
     }
 }
 
-class IncrementingFileWriter(private val outdir: String, private val engine: RecordProcessor) : WriterInterface {
+internal class IncrementingFileWriter(private val outdir: String, private val engine: RecordProcessor) : WriterInterface {
 
     private var count = 0
 
@@ -199,7 +199,7 @@ class IncrementingFileWriter(private val outdir: String, private val engine: Rec
     }
 }
 
-class FormatProcessor(private val formatter: Formatter) : RecordProcessor {
+internal class FormatProcessor(private val formatter: Formatter) : RecordProcessor {
 
     override fun process(record: Map<String, Any>): String {
         return formatter.format(record)
@@ -210,19 +210,17 @@ class FormatProcessor(private val formatter: Formatter) : RecordProcessor {
     }
 }
 
-fun forFormat(key: String): RecordProcessor {
+internal fun forFormat(key: String): RecordProcessor {
     val formatter: Formatter =
         Formatters.forType(key) ?: throw SpecException("Unable to load RecordProcessor for format $key")
     return FormatProcessor(formatter)
 }
 
-
-
-fun fileNameEngine(outfilePrefix: String, extension: String): RecordProcessor {
+internal fun fileNameEngine(outfilePrefix: String, extension: String): RecordProcessor {
     return FileNameProcessor(outfilePrefix, extension)
 }
 
-class FileNameProcessor(private val prefix: String, private val extension: String) : RecordProcessor {
+internal class FileNameProcessor(private val prefix: String, private val extension: String) : RecordProcessor {
     override fun process(record: Map<String, Any>): String {
         return "$prefix${record["count"]}.$extension"
     }

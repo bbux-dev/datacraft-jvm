@@ -6,7 +6,7 @@ import org.datacraft.suppliers.CastSupplier
 import org.datacraft.suppliers.DecoratedSupplier
 import java.util.*
 
-object Loaders {
+internal object Loaders {
     fun init(spec: DataSpec, enforceSchema: Boolean = false, dataDir: String? = null): Loader {
         val serviceLoader = ServiceLoader.load(ValueSupplierLoader::class.java)
         val mapping = mutableMapOf<String, ValueSupplierLoader<*>>()

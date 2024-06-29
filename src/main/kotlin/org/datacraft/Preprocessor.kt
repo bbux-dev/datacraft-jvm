@@ -3,7 +3,7 @@ package org.datacraft
 import kotlinx.serialization.json.*
 import java.net.URLDecoder
 
-object Preprocessor {
+internal object Preprocessor {
     /**
      *
      */

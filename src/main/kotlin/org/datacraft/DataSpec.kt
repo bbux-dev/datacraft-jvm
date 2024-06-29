@@ -100,15 +100,8 @@ class DataSpec(
         type: Class<T>,
         output: OutputHandlerInterface? = null,
         excludeInternal: Boolean = false
-    ): Iterator<T> = object : Iterator<T> {
-        private val baseIterator = generator(iterations, output, excludeInternal)
-
-        override fun hasNext(): Boolean = baseIterator.hasNext()
-
-        override fun next(): T {
-            val map = baseIterator.next()
-            return gson.fromJson(gson.toJsonTree(map), type)
-        }
+    ): List<T> {
+        return this.generateRecords(iterations, type, output, excludeInternal).asSequence().toList()
     }
 
     /**
@@ -179,11 +172,19 @@ class DataSpec(
          * @return a `FieldSpec` corresponding to the provided value or `null` if the value cannot be converted.
          */
         fun fieldSpecFrom(value: Any?): FieldSpec? {
-            if (value is Map<*, *>) {
+            if (value is Map<*, *> && value.containsKey("type")) {
                 @Suppress("UNCHECKED_CAST")
                 val spec = value as Map<String, Any?>
 
                 return FieldSpec.forType(spec["type"] as String, spec)
+            }
+            // this is most likely a weighted values spec
+            if (value is Map<*, *> && !value.containsKey("type")) {
+                val remapped: Map<String, Number> = value
+                    .mapKeys { it.key.toString() }
+                    .mapValues { it.value.toString().toDouble() }
+
+                return FieldSpec.values(remapped)
             }
             if (value is List<*>) {
                 return FieldSpec.values(value)

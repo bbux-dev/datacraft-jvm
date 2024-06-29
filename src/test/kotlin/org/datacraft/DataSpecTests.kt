@@ -9,8 +9,8 @@ import io.kotest.matchers.shouldBe
 
 class DataSpecTests : StringSpec({
     "parseSpec should correctly parse a raw spec into a Map of FieldSpec" {
-        val rawSpec: Map<String, Any?> = mapOf("field" to Specs.values(listOf("one", "two", "tre")))
-        val spec: DataSpec = DataSpec.parse(rawSpec)
+        val sb = Datacraft.specBuilder()
+        val spec = sb.field("field").values(listOf("one", "two", "tre")).build()
 
         spec.data.size shouldBe 1
     }

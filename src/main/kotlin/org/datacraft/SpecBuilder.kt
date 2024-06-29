@@ -154,6 +154,24 @@ class SpecBuilder {
         }
 
         /**
+         * Specifies a set of values to weights for the field.
+         *
+         * @param weights The map of value to weight
+         * @param config optional configuration
+         * @return The SpecBuilder instance for chaining.
+         */
+        @JvmOverloads
+        fun values(weights: Map<String, Number>, config: Map<String, Any> = emptyMap()): SpecBuilder {
+            val fieldSpec = mapOf(
+                "type" to "values",
+                "data" to weights,
+                "config" to config
+            )
+            parent.addField(fieldName, fieldSpec, isRef)
+            return parent
+        }
+
+        /**
          * Builds a uuid spec
          *
          * @param config optional configuration

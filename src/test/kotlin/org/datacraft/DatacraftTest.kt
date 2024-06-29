@@ -49,6 +49,38 @@ class DatacraftTest : StringSpec({
         first.name shouldBe "cat"
         first.count shouldBeInRange 1..4
     }
+
+    "should generate typed data records from map" {
+        val data = mapOf(
+            "name" to listOf("cat", "dog", "pig", "frog"),
+            "count" to mapOf(
+                "1" to 0.5, "2" to 0.3, "3" to 0.1, "4" to 0.1
+            )
+        )
+        val iterator = Datacraft.generateRecords(data, 4, SampleRecord::class.java)
+
+        val records = iterator.asSequence().toList()
+        records.size shouldBe 4
+        val first = records[0]
+        first.name shouldBe "cat"
+        first.count shouldBeInRange 1..4
+    }
+    "should generate entries from JSON string" {
+        var json = """
+        {
+          "id": { "type": "uuid" },
+          "ts:date.iso": {}
+        }
+        """;
+        val entries = Datacraft.entries(json, 5)
+
+        entries.size shouldBe 5
+        entries.forEach {
+            val record = it
+            record["id"].shouldNotBeNull()
+            record["ts"].shouldNotBeNull()
+        }
+    }
     "should generate entries from Map" {
         val map = mapOf(
             "ts" to mapOf(
@@ -64,5 +96,31 @@ class DatacraftTest : StringSpec({
             record["ts"].shouldNotBeNull()
             record["name"].shouldNotBeNull()
         }
+    }
+    "should generate typed data record entries from JSON" {
+        val json = """{
+            "name": ["cat", "dog", "pig", "frog"],
+            "count": {"1": 0.5, "2": 0.3, "3": 0.1, "4": 0.1}
+        }"""
+        val records = Datacraft.recordEntries(json, 4, SampleRecord::class.java)
+
+        records.size shouldBe 4
+        val first = records[0]
+        first.name shouldBe "cat"
+        first.count shouldBeInRange 1..4
+    }
+    "should generate typed data record entries from map" {
+        val data = mapOf(
+            "name" to listOf("cat", "dog", "pig", "frog"),
+            "count" to mapOf(
+                "1" to 0.5, "2" to 0.3, "3" to 0.1, "4" to 0.1
+            )
+        )
+        val records = Datacraft.recordEntries(data, 4, SampleRecord::class.java)
+
+        records.size shouldBe 4
+        val last = records[3]
+        last.name shouldBe "frog"
+        last.count shouldBeInRange 1..4
     }
 })

@@ -4,10 +4,9 @@ import org.datacraft.annotations.CastName
 import org.datacraft.casters.RoundCaster
 import org.datacraft.casters.ZFillCaster
 import org.datacraft.models.Caster
-import org.datacraft.models.ValueSupplierLoader
 import java.util.*
 
-object Registries {
+internal object Registries {
     private val defaultValues: Map<String, Any> = mapOf(
         "date_format" to "yyyy-MM-dd",
         "date_duration_days" to 30,

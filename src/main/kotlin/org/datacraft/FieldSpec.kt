@@ -11,7 +11,7 @@ import java.util.*
  */
 sealed class FieldSpec(val type: String, val data: Any?, val config: Map<String, Any>?) {
 
-    class BasicFieldSpec(type: String, data: Any?, config: Map<String, Any>?) : FieldSpec(type, data, config)
+    internal class BasicFieldSpec(type: String, data: Any?, config: Map<String, Any>?) : FieldSpec(type, data, config)
     companion object {
 
         private fun basic(type: String, data: Any?, config: Map<String, Any>): FieldSpec {
@@ -82,5 +82,5 @@ sealed class FieldSpec(val type: String, val data: Any?, val config: Map<String,
     }
 }
 
-class CombineFieldSpec(config: Map<String, Any>?, val refs : List<String>, val fields: List<String> ) :
+internal class CombineFieldSpec(config: Map<String, Any>?, val refs : List<String>, val fields: List<String> ) :
     FieldSpec("combine", null, config)

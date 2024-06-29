@@ -8,6 +8,7 @@ object Datacraft {
      * @param iterations the number of records to generate.
      * @return an iterator that produces a series of maps, where each map represents a data record.
      */
+    @JvmStatic
     fun generator(json: String, iterations: Long): Iterator<Map<String, Any?>> = object : Iterator<Map<String, Any?>> {
         val gen = DataSpec.parseString(json).generator(iterations)
 
@@ -27,6 +28,7 @@ object Datacraft {
      * @param iterations the number of records to generate.
      * @return an iterator that produces a series of maps, where each map represents a data record.
      */
+    @JvmStatic
     fun generator(rawMap: Map<String, Any?>, iterations: Long): Iterator<Map<String, Any?>> =
         object : Iterator<Map<String, Any?>> {
             val gen = DataSpec.parse(rawMap).generator(iterations)
@@ -51,6 +53,7 @@ object Datacraft {
      * @return an iterator over instances of the specified type.
      * @throws JsonSyntaxException if JSON serialization or deserialization fails.
      */
+    @JvmStatic
     fun <T> generateRecords(json: String, iterations: Long, type: Class<T>): Iterator<T> = object : Iterator<T> {
         val gen = DataSpec.parseString(json).generateRecords(iterations, type)
 
@@ -74,6 +77,7 @@ object Datacraft {
      * @param type the class of the type to which the generated records should be converted.
      * @return an iterator over instances of the specified type.
      */
+    @JvmStatic
     fun <T> generateRecords(rawMap: Map<String, Any?>, iterations: Long, type: Class<T>): Iterator<T> =
         object : Iterator<T> {
             val gen = DataSpec.parse(rawMap).generateRecords(iterations, type)
@@ -94,7 +98,8 @@ object Datacraft {
      * @param iterations the number of records to generate.
      * @return a list of generated records
      */
-    fun entries(json: String, iterations: Long): List<Any> {
+    @JvmStatic
+    fun entries(json: String, iterations: Long): List<Map<String, Any?>> {
         return DataSpec.parseString(json).entries(iterations)
     }
 
@@ -105,7 +110,40 @@ object Datacraft {
      * @param iterations the number of records to generate.
      * @return a list of generated records
      */
+    @JvmStatic
     fun entries(rawMap: Map<String, Any?>, iterations: Long): List<Map<String, Any?>> {
         return DataSpec.parse(rawMap).entries(iterations)
     }
+
+    /**
+     * Generates a List of Records of the specified type, each conforming to the specified field specifications.
+     *
+     * @param json the JSON version of the DataSpec
+     * @param iterations the number of records to generate.
+     * @param type the class of the type to which the generated records should be converted.
+     * @return a list of generated records
+     */
+    @JvmStatic
+    fun <T> recordEntries(json: String, iterations: Long, type: Class<T>): List<T> {
+        return DataSpec.parseString(json).recordEntries(iterations, type)
+    }
+
+    /**
+     * Generates a List of Records of the specified type, each conforming to the specified field specifications.
+     *
+     * @param rawMap the Map version of the DataSpec
+     * @param iterations the number of records to generate.
+     * @param type the class of the type to which the generated records should be converted.
+     * @return a list of generated records
+     */
+    @JvmStatic
+    fun <T> recordEntries(rawMap: Map<String, Any?>, iterations: Long, type: Class<T>): List<T> {
+        return DataSpec.parse(rawMap).recordEntries(iterations, type)
+    }
+
+    /**
+     * Creates a new SpecBuilder
+     */
+    @JvmStatic
+    fun specBuilder() : SpecBuilder = SpecBuilder()
 }

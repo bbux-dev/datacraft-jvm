@@ -19,7 +19,7 @@ import org.yaml.snakeyaml.nodes.Node
 import org.yaml.snakeyaml.nodes.Tag
 import java.io.File
 
-class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
+internal class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
     private val spec by option("-s", "--spec", help = "Spec to use").file()
     private val inline by option("--inline", help = "Spec as string")
     private val iterations by option("-i", "--iterations", help = "Number of iterations to execute").long().default(100)
@@ -160,7 +160,7 @@ class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
     }
 }
 
-class CustomYamlConstructor(type: Class<*>) : Constructor(type, LoaderOptions()) {
+internal class CustomYamlConstructor(type: Class<*>) : Constructor(type, LoaderOptions()) {
     override fun constructObject(node: Node): Any {
         if (node.tag == Tag.MAP) {
             val map = super.constructObject(node) as LinkedHashMap<String, Any>
