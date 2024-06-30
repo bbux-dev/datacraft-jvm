@@ -80,4 +80,8 @@ object Suppliers {
         return FunctionSupplier(function)
     }
 
+    fun sample(data: List<Any>): ValueSupplier<Any> {
+        return SampleSupplier(data)
+    }
+
 }

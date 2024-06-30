@@ -45,6 +45,18 @@ class LoaderTest : StringSpec({
         supplier shouldNot beNull()
         supplier.next(1) shouldNot beNull()
     }
+    "When init then sample type should be discovered" {
+        val json = """
+            {
+              "foo:sample": [1, 2, 3, 5, 8, 13]
+            }
+        """
+        assert(TestUtils.validateJson(json))
+
+        val supplier = supplierForSpec(json, "foo")
+        supplier shouldNot beNull()
+        supplier.next(1) shouldNot beNull()
+    }
     "When spec configured with cast and prefix value should be correct" {
         val json = """
             {
@@ -82,7 +94,7 @@ class LoaderTest : StringSpec({
     }
 })
 
-private fun supplierForSpec(json: String, key: String): ValueSupplier<Any> {
+internal fun supplierForSpec(json: String, key: String): ValueSupplier<Any> {
     val spec: DataSpec = DataSpec.parseString(json)
     val loader = Loaders.init(spec)
     val supplier = loader.get(key)

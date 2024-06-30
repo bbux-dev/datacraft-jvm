@@ -11,7 +11,7 @@ import java.util.*
  */
 sealed class FieldSpec(val type: String, val data: Any?, val config: Map<String, Any>?) {
 
-    internal class BasicFieldSpec(type: String, data: Any?, config: Map<String, Any>?) : FieldSpec(type, data, config)
+    internal class BasicFieldSpec(type: String, data: Any?, config: Map<String, Any>? = null) : FieldSpec(type, data, config)
     companion object {
 
         private fun basic(type: String, data: Any?, config: Map<String, Any>): FieldSpec {
