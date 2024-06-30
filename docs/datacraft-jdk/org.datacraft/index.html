@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.datacraft</title>
+    <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+                    <a class="library-name--link" href="../../index.html">
+                            datacraft-jdk
+                    </a>
+            </div>
+            <div class="library-version">
+            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter="datacraft-jdk/JVM">JVM</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageIds="datacraft-jdk::org.datacraft////PointingToDeclaration//-1843325084">
+  <div class="breadcrumbs"><a href="../../index.html">datacraft-jdk</a><span class="delimiter">/</span><span class="current">org.datacraft</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="datacraft-jdk/JVM"><h1 class="">Datacraft JDK Usage</h1><p class="paragraph">Datacraft JDK is a port of the python library <a href="https://datacraft.readthedocs.io/en/latest/">datacraft</a>. It adheres to the same data and field specification schemas, but provides JDK friendly entry points.</p><h1 class="">Examples</h1><h2 class="">Spec as JSON String</h2><p class="paragraph">The default format for specifying the structure of the data you want generated is with a DataSpec as a JSON document. The basic format is a dictionary/map where the key is the top level field name and the value is another dictionary/map called a FieldSpec that describes the field. For example: <code class="lang-kotlin">{&quot;id&quot;: {&quot;type&quot;: &quot;uuid&quot;}}</code> is a DataSpec for a single field <code class="lang-kotlin">id</code> that is of type <code class="lang-kotlin">uuid</code>. This is all that is needed to describe that field. There are lots of other types and mechanisms for generating data. See the <a href="https://datacraft.readthedocs.io/en/latest/coretypes.html">core types</a> docs for more details on types.</p><h3 class="">Records as Maps</h3><p class="paragraph">In the example below we have a Record that consists of three fields: <code class="lang-kotlin">id</code>, <code class="lang-kotlin">date</code>, and <code class="lang-kotlin">age</code>. We create the DataSpec as a JSON document to specify how each field should be generated. We then pass this to the <code class="lang-kotlin">Datacraft.entries</code> method to get 100 different records as Maps.</p><div class="sample-container"><pre><code class="block lang-java" theme="idea">import org.datacraft.Datacraft;<br><br>import java.util.List;<br>import java.util.Map;<br><br>class TestStuff {<br>    public static void main(String[] args) {<br>        String json = &quot;&quot;&quot;<br>        {<br>          &quot;id&quot;: {&quot;type&quot;: &quot;uuid&quot;},<br>          &quot;date&quot;: {&quot;type&quot;: &quot;date.iso&quot; },<br>          &quot;age&quot;: {<br>            &quot;type&quot;: &quot;range&quot;,<br>            &quot;data&quot;: [22, 43]<br>          }<br>        }<br>        &quot;&quot;&quot;;<br>        List&lt;Map&lt;String, Object&gt;&gt; recordsAsMaps = Datacraft.entries(json, 100);<br>        System.out.println(recordsAsMaps.get(0));<br>        //{id=3f0c99c5-6fdb-40f3-926b-67f17963e230, date=2024-06-21T20:28:55, age=22}<br>    }<br>}</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><h3 class="">Records as Objects</h3><p class="paragraph">Most of the time we want our data as a specific POJO or Java Record. If the field names match the POJO or Record exactly, you can use the <code class="lang-kotlin">Datacraft.recordEntries</code> method:</p><div class="sample-container"><pre><code class="block lang-java" theme="idea">import org.datacraft.Datacraft;<br><br>import java.util.List;<br><br>class TestStuff {<br>    // how we want the data represented<br>    record Info(String id, String date, Number age) {}<br><br>    public static void main(String[] args) {<br>        String json = &quot;&quot;&quot;<br>        {<br>          &quot;id&quot;: {&quot;type&quot;: &quot;uuid&quot;},<br>          &quot;date&quot;: {&quot;type&quot;: &quot;date.iso&quot; },<br>          &quot;age&quot;: {<br>            &quot;type&quot;: &quot;range&quot;,<br>            &quot;data&quot;: [22, 43]<br>          }<br>        }<br>        &quot;&quot;&quot;;<br>        List&lt;Info&gt; recordsAsObjects = Datacraft.recordEntries(json, 100, Info.class);<br>        System.out.println(recordsAsObjects.get(0));<br>        //Info[id=da459eee-71c9-4b2e-b728-8378eac0b5f2, date=2024-06-27T12:33:22, age=22]<br>    }<br>}</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><h2 class="">Spec with SpecBuilder</h2><p class="paragraph">If you prefer using code to build your DataSpec you can make use of the <code class="lang-kotlin">SpecBuilder</code> class. This will build a <code class="lang-kotlin">DataSpec</code> object which will have similar methods to calling the static Datacraft data generation ones.</p><div class="sample-container"><pre><code class="block lang-java" theme="idea">import org.datacraft.DataSpec;<br>import org.datacraft.Datacraft;<br><br>import java.util.List;<br><br>class TestStuff {<br>    record Info(String id, String date, Number age) {}<br><br>    public static void main(String[] args) {<br>        DataSpec dataSpec = Datacraft.specBuilder()<br>                .fieldByKey(&quot;id:uuid&quot;)<br>                .fieldByKey(&quot;date:date.iso&quot;)<br>                .field(&quot;age&quot;).range(22, 43)<br>                .build();<br>        List&lt;Info&gt; recordsAsMaps = dataSpec.recordEntries( 100, Info.class);<br>        System.out.println(recordsAsMaps.get(0));<br>        //Info[id=5b08ae1e-c1d1-4bae-9900-0d51b2b838be, date=2024-06-27T22:53:51, age=22]<br>    }<br>}</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="906690846%2FClasslikes%2F-1843325084" anchor-label="Datacraft" id="906690846%2FClasslikes%2F-1843325084" data-filterable-set="datacraft-jdk/JVM"></a>
+          <div class="table-row" data-filterable-current="datacraft-jdk/JVM" data-filterable-set="datacraft-jdk/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-datacraft/index.html"><span><span>Datacraft</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="906690846%2FClasslikes%2F-1843325084"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="datacraft-jdk/JVM"><div class="symbol monospace"><span class="token keyword">object </span><a href="-datacraft/index.html">Datacraft</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1946736631%2FClasslikes%2F-1843325084" anchor-label="DataSpec" id="-1946736631%2FClasslikes%2F-1843325084" data-filterable-set="datacraft-jdk/JVM"></a>
+          <div class="table-row" data-filterable-current="datacraft-jdk/JVM" data-filterable-set="datacraft-jdk/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-data-spec/index.html"><span>Data</span><wbr></wbr><span><span>Spec</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1946736631%2FClasslikes%2F-1843325084"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="datacraft-jdk/JVM"><div class="symbol monospace"><span class="token keyword">class </span><a href="-data-spec/index.html">DataSpec</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>data<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-field-spec/index.html">FieldSpec</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>refs<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-field-spec/index.html">FieldSpec</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">enforceSchema<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter ">dataDir<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span>Registries.getDefault(&quot;data_dir&quot;)</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A class for producing data records from field specifications.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1303715551%2FClasslikes%2F-1843325084" anchor-label="FieldSpec" id="1303715551%2FClasslikes%2F-1843325084" data-filterable-set="datacraft-jdk/JVM"></a>
+          <div class="table-row" data-filterable-current="datacraft-jdk/JVM" data-filterable-set="datacraft-jdk/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-field-spec/index.html"><span>Field</span><wbr></wbr><span><span>Spec</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1303715551%2FClasslikes%2F-1843325084"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="datacraft-jdk/JVM"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-field-spec/index.html">FieldSpec</a></div><div class="brief "><p class="paragraph">Represents the specification for a field, including its type, data, and configuration.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-500451973%2FClasslikes%2F-1843325084" anchor-label="Loader" id="-500451973%2FClasslikes%2F-1843325084" data-filterable-set="datacraft-jdk/JVM"></a>
+          <div class="table-row" data-filterable-current="datacraft-jdk/JVM" data-filterable-set="datacraft-jdk/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-loader/index.html"><span><span>Loader</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-500451973%2FClasslikes%2F-1843325084"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="datacraft-jdk/JVM"><div class="symbol monospace"><span class="token keyword">class </span><a href="-loader/index.html">Loader</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">spec<span class="token operator">: </span><a href="-data-spec/index.html">DataSpec</a><span class="token punctuation">, </span></span><span class="parameter ">mapping<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="../org.datacraft.models/-value-supplier-loader/index.html">ValueSupplierLoader</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">enforceSchema<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>dataDir<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1751502338%2FClasslikes%2F-1843325084" anchor-label="OutputHandlerInterface" id="-1751502338%2FClasslikes%2F-1843325084" data-filterable-set="datacraft-jdk/JVM"></a>
+          <div class="table-row" data-filterable-current="datacraft-jdk/JVM" data-filterable-set="datacraft-jdk/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-output-handler-interface/index.html"><span>Output</span><wbr></wbr><span>Handler</span><wbr></wbr><span><span>Interface</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1751502338%2FClasslikes%2F-1843325084"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="datacraft-jdk/JVM"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-output-handler-interface/index.html">OutputHandlerInterface</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-256068990%2FClasslikes%2F-1843325084" anchor-label="Outputs" id="-256068990%2FClasslikes%2F-1843325084" data-filterable-set="datacraft-jdk/JVM"></a>
+          <div class="table-row" data-filterable-current="datacraft-jdk/JVM" data-filterable-set="datacraft-jdk/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-outputs/index.html"><span><span>Outputs</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-256068990%2FClasslikes%2F-1843325084"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="datacraft-jdk/JVM"><div class="symbol monospace"><span class="token keyword">class </span><a href="-outputs/index.html">Outputs</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-29393676%2FClasslikes%2F-1843325084" anchor-label="SpecBuilder" id="-29393676%2FClasslikes%2F-1843325084" data-filterable-set="datacraft-jdk/JVM"></a>
+          <div class="table-row" data-filterable-current="datacraft-jdk/JVM" data-filterable-set="datacraft-jdk/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-spec-builder/index.html"><span>Spec</span><wbr></wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-29393676%2FClasslikes%2F-1843325084"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="datacraft-jdk/JVM"><div class="symbol monospace"><span class="token keyword">class </span><a href="-spec-builder/index.html">SpecBuilder</a></div><div class="brief "><p class="paragraph">SpecBuilder is a builder class for creating DataSpec objects.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1290635072%2FClasslikes%2F-1843325084" anchor-label="SpecException" id="1290635072%2FClasslikes%2F-1843325084" data-filterable-set="datacraft-jdk/JVM"></a>
+          <div class="table-row" data-filterable-current="datacraft-jdk/JVM" data-filterable-set="datacraft-jdk/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-spec-exception/index.html"><span>Spec</span><wbr></wbr><span><span>Exception</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1290635072%2FClasslikes%2F-1843325084"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="datacraft-jdk/JVM"><div class="symbol monospace"><span class="token keyword">class </span><a href="-spec-exception/index.html">SpecException</a> : <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html">Exception</a></div><div class="brief "><p class="paragraph">Exception thrown when a specification cannot be found or processed.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1138786611%2FClasslikes%2F-1843325084" anchor-label="Suppliers" id="-1138786611%2FClasslikes%2F-1843325084" data-filterable-set="datacraft-jdk/JVM"></a>
+          <div class="table-row" data-filterable-current="datacraft-jdk/JVM" data-filterable-set="datacraft-jdk/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-suppliers/index.html"><span><span>Suppliers</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1138786611%2FClasslikes%2F-1843325084"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="datacraft-jdk/JVM"><div class="symbol monospace"><span class="token keyword">object </span><a href="-suppliers/index.html">Suppliers</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-114578915%2FClasslikes%2F-1843325084" anchor-label="TemplateEngines" id="-114578915%2FClasslikes%2F-1843325084" data-filterable-set="datacraft-jdk/JVM"></a>
+          <div class="table-row" data-filterable-current="datacraft-jdk/JVM" data-filterable-set="datacraft-jdk/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-template-engines/index.html"><span>Template</span><wbr></wbr><span><span>Engines</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-114578915%2FClasslikes%2F-1843325084"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="datacraft-jdk/JVM"><div class="symbol monospace"><span class="token keyword">class </span><a href="-template-engines/index.html">TemplateEngines</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="536014807%2FClasslikes%2F-1843325084" anchor-label="ValueSupplier" id="536014807%2FClasslikes%2F-1843325084" data-filterable-set="datacraft-jdk/JVM"></a>
+          <div class="table-row" data-filterable-current="datacraft-jdk/JVM" data-filterable-set="datacraft-jdk/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-value-supplier/index.html"><span>Value</span><wbr></wbr><span><span>Supplier</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="536014807%2FClasslikes%2F-1843325084"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="datacraft-jdk/JVM"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-value-supplier/index.html">ValueSupplier</a><span class="token operator">&lt;</span><a href="-value-supplier/index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Interface for supplying values of any type. Implementations define how values are generated or retrieved.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-724101234%2FClasslikes%2F-1843325084" anchor-label="WriterInterface" id="-724101234%2FClasslikes%2F-1843325084" data-filterable-set="datacraft-jdk/JVM"></a>
+          <div class="table-row" data-filterable-current="datacraft-jdk/JVM" data-filterable-set="datacraft-jdk/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-writer-interface/index.html"><span>Writer</span><wbr></wbr><span><span>Interface</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-724101234%2FClasslikes%2F-1843325084"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="datacraft-jdk/JVM"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-writer-interface/index.html">WriterInterface</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-1560994180%2FFunctions%2F-1843325084" anchor-label="main" id="-1560994180%2FFunctions%2F-1843325084" data-filterable-set="datacraft-jdk/JVM"></a>
+          <div class="table-row" data-filterable-current="datacraft-jdk/JVM" data-filterable-set="datacraft-jdk/JVM">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="main.html"><span><span>main</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1560994180%2FFunctions%2F-1843325084"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable="datacraft-jdk/JVM"><div class="symbol monospace"><span class="token keyword">fun </span><a href="main.html"><span class="token function">main</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

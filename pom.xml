@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.datacraft</groupId>
-    <artifactId>datacraft-jdk</artifactId>
+    <artifactId>datacraft-jvm</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -114,10 +114,17 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <outputDir>${project.build.directory}/dokka</outputDir>
+                    <outputDir>${project.basedir}/docs</outputDir>
                     <includes>
-                        <include>docs/usage.md</include>
+                        <include>src/docs/usage.md</include>
                     </includes>
+                    <suppressedFiles>
+                        <file>src/main/kotlin/org/datacraft/annotations</file>
+                        <file>src/main/kotlin/org/datacraft/casters</file>
+                        <file>src/main/kotlin/org/datacraft/format</file>
+                        <file>src/main/kotlin/org/datacraft/loaders</file>
+                        <file>src/main/kotlin/org/datacraft/suppliers</file>
+                    </suppressedFiles>
                 </configuration>
             </plugin>
             <!-- Plugin to create the shaded JAR with dependencies -->

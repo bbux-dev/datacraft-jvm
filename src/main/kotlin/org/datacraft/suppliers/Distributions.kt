@@ -1,4 +1,4 @@
-package org.datacraft
+package org.datacraft.suppliers
 
 import org.datacraft.models.Distribution
 import java.util.*

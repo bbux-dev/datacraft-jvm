@@ -1,2 +1,2 @@
-# datacraft-jdk
-JDK implementation of Datacraft Data Generation
+# datacraft-jvm
+JVM implementation of Datacraft Data Generation
