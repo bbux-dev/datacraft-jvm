@@ -84,4 +84,8 @@ object Suppliers {
         return SampleSupplier(data)
     }
 
+    fun ipV4Address(cidr: String?): ValueSupplier<String> {
+        return IpSupplier(cidr)
+    }
+
 }

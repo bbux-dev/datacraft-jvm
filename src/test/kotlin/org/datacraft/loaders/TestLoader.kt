@@ -9,5 +9,5 @@ internal fun testLoader(): Loader {
 }
 
 internal fun basicFieldSpec(
-    type: String, data: Any, config : Map<String, Any>? = null
+    type: String, data: Any? = null, config : Map<String, Any>? = null
 ) = FieldSpec.BasicFieldSpec(type, data, config)

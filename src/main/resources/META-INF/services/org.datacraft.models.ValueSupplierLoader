@@ -9,3 +9,4 @@ org.datacraft.loaders.RangeLoader
 org.datacraft.loaders.RandomRangeLoader
 org.datacraft.loaders.UuidLoader
 org.datacraft.loaders.SampleLoader
+org.datacraft.loaders.IpLoader
