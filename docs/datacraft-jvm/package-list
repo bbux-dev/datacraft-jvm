@@ -92,8 +92,10 @@ $dokka.location:org.datacraft/Suppliers.FunctionSupplier/next/#kotlin.Long/Point
 $dokka.location:org.datacraft/Suppliers///PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/index.html
 $dokka.location:org.datacraft/Suppliers/combine/#kotlin.collections.List[org.datacraft.ValueSupplier[kotlin.Any]]#kotlin.String?#kotlin.Boolean?/PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/combine.html
 $dokka.location:org.datacraft/Suppliers/functionSupplier/#kotlin.Function1[kotlin.Long,TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/function-supplier.html
+$dokka.location:org.datacraft/Suppliers/ipV4Address/#kotlin.String?/PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/ip-v4-address.html
 $dokka.location:org.datacraft/Suppliers/randomRange/#kotlin.Double#kotlin.Double/PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/random-range.html
 $dokka.location:org.datacraft/Suppliers/range/#kotlin.Int#kotlin.Int#kotlin.Int/PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/range.html
+$dokka.location:org.datacraft/Suppliers/sample/#kotlin.collections.List[kotlin.Any]/PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/sample.html
 $dokka.location:org.datacraft/Suppliers/values/#kotlin.Any/PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/values.html
 $dokka.location:org.datacraft/TemplateEngines.Companion///PointingToDeclaration/datacraft-jvm/org.datacraft/-template-engines/-companion/index.html
 $dokka.location:org.datacraft/TemplateEngines.Companion/forFile/#kotlin.String/PointingToDeclaration/datacraft-jvm/org.datacraft/-template-engines/-companion/for-file.html

@@ -72,8 +72,8 @@ class TestStuff {
           }
         }
         """;
-        List<Info> recordsAsObjects = Datacraft.recordEntries(json, 100, Info.class);
-        System.out.println(recordsAsObjects.get(0));
+        List<Info> recordList = Datacraft.recordEntries(json, 100, Info.class);
+        System.out.println(recordList.get(0));
         //Info[id=da459eee-71c9-4b2e-b728-8378eac0b5f2, date=2024-06-27T12:33:22, age=22]
     }
 }
@@ -99,9 +99,14 @@ class TestStuff {
                 .fieldByKey("date:date.iso")
                 .field("age").range(22, 43)
                 .build();
-        List<Info> recordsAsMaps = dataSpec.recordEntries( 100, Info.class);
-        System.out.println(recordsAsMaps.get(0));
+        List<Info> infoList = dataSpec.recordEntries(100, Info.class);
+        System.out.println(infoList.get(0));
         //Info[id=5b08ae1e-c1d1-4bae-9900-0d51b2b838be, date=2024-06-27T22:53:51, age=22]
     }
 }
 ```
+
+Note that in this example we use shortcut notation to specify both the field name and the type of data in the key
+e.g: `id:uuid`. See
+[Field Spec Structure](https://datacraft.readthedocs.io/en/latest/fieldspecs.html#field-spec-structure) for more
+details.
