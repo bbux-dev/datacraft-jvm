@@ -12,3 +12,4 @@ org.datacraft.loaders.SampleLoader
 org.datacraft.loaders.IpLoader
 org.datacraft.loaders.GeoLatLoader
 org.datacraft.loaders.GeoLongLoader
+org.datacraft.loaders.GeoPairLoader
