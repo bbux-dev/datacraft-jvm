@@ -1,5 +1,6 @@
 package org.datacraft
 
+import org.datacraft.models.Caster
 import org.datacraft.suppliers.*
 
 
@@ -86,6 +87,10 @@ object Suppliers {
 
     fun ipV4Address(cidr: String?): ValueSupplier<String> {
         return IpSupplier(cidr)
+    }
+
+    fun <T> cast(supplier: ValueSupplier<Any>, caster: Caster<T>): ValueSupplier<T> {
+        return CastSupplier(supplier, caster)
     }
 
 }
