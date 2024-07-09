@@ -27,7 +27,7 @@ class GeoPairLoader : ValueSupplierLoader<Any> {
 
 }
 
-internal fun getLongitudeSupplier(config: Map<String, Any>): ValueSupplier<Any> {
+internal fun getLongitudeSupplier(config: Map<String, Any>): ValueSupplier<Double> {
     val startLong: Double = getConfigValue(config, "start_long", -180.0)
     val endLong: Double = getConfigValue(config, "end_long", 180.0)
     if (startLong < -180 || startLong > 180) {
@@ -40,7 +40,7 @@ internal fun getLongitudeSupplier(config: Map<String, Any>): ValueSupplier<Any> 
     return longSupplier
 }
 
-internal fun getLatitudeSupplier(config: Map<String, Any>): ValueSupplier<Any> {
+internal fun getLatitudeSupplier(config: Map<String, Any>): ValueSupplier<Double> {
     val startLat: Double = getConfigValue(config, "start_lat", -90.0)
     val endLat: Double = getConfigValue(config, "end_lat", 90.0)
     if (startLat < -90 || startLat > 90) {

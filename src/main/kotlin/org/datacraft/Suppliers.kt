@@ -46,7 +46,7 @@ object Suppliers {
      *               If true, results are combined into a list; if false or null, results are combined into a string.
      * @return Returns a `ValueSupplier<Any>` that either supplies the combined string or list, depending on `asList`.
      */
-    fun combine(suppliers: List<ValueSupplier<Any>>,
+    fun combine(suppliers: List<ValueSupplier<*>>,
                 joinWith: String? = null,
                 asList: Boolean? = false): ValueSupplier<Any> {
         return CombineSupplier(suppliers, joinWith, asList)
@@ -67,7 +67,7 @@ object Suppliers {
         return RangeSupplier(start, end, step)
     }
 
-    fun randomRange(start: Double, end: Double): ValueSupplier<Any> {
+    fun randomRange(start: Double, end: Double): ValueSupplier<Double> {
         return RandomRangeSupplier(start, end)
     }
 

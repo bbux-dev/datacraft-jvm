@@ -5,8 +5,8 @@ import org.datacraft.ValueSupplier
 class RandomRangeSupplier(
     private val start: Double,
     private val end: Double
-) : ValueSupplier<Any> {
-    override fun next(iteration: Long): Any {
+) : ValueSupplier<Double> {
+    override fun next(iteration: Long): Double {
         return Random.nextDouble(start, end)
     }
 }
