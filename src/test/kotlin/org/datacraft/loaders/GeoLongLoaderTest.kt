@@ -27,7 +27,7 @@ class GeoLongLoaderTest : StringSpec({
         val loader = GeoLongLoader()
         // bad data
         val config = mapOf("start_long" to -199.0)
-        val spec = basicFieldSpec("geo.long", null, config)
+        val spec = basicFieldSpec("geo.long", config=config)
         // when, then
         shouldThrow<SpecException> {
             loader.load(spec, testLoader())

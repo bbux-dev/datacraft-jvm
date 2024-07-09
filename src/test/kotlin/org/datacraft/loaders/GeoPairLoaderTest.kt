@@ -24,13 +24,13 @@ class GeoPairLoaderTest : StringSpec({
         val loader = GeoPairLoader()
         loader.typeNames() shouldBe listOf("geo.pair")
         val config = mapOf("as_list" to true)
-        val spec = basicFieldSpec("geo.pair", null, config)
+        val spec = basicFieldSpec("geo.pair", config=config)
         // when
         val supplier = loader.load(spec, testLoader())
         // then
         val value = supplier.next(1)
         (value is List<*>) shouldBe true
-        (value as List<Any>).size shouldBe 2
+        (value as List<*>).size shouldBe 2
     }
 
     "When invalid geo.pair spec SpecException in thrown" {
@@ -38,7 +38,7 @@ class GeoPairLoaderTest : StringSpec({
         val loader = GeoPairLoader()
         // bad data
         val config = mapOf("start_long" to -199.0)
-        val spec = basicFieldSpec("geo.pair", null, config)
+        val spec = basicFieldSpec("geo.pair", config=config)
         // when, then
         shouldThrow<SpecException> {
             loader.load(spec, testLoader())
