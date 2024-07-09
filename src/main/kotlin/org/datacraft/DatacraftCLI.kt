@@ -54,8 +54,8 @@ internal class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
     override fun run() {
         // these bypass spec loading
         if (typeList) {
-            val types = Loaders.configuredTypes()
-            println(types)
+            val types : List<String> = Loaders.configuredTypes()
+            println(types.joinToString(separator = "\n"))
             return
         }
         if (debugSpec or debugSpecYaml) {
