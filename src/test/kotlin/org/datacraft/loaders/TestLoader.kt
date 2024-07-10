@@ -8,5 +8,5 @@ internal fun testLoader(spec : String = "{}"): Loader {
 }
 
 internal fun basicFieldSpec(
-    type: String, data: Any? = null, ref: Any?=null, config : Map<String, Any>? = null
-) = FieldSpec.BasicFieldSpec(type, data, ref, config)
+    type: String, data: Any? = null, config : Map<String, Any>? = null
+) = FieldSpec.BasicFieldSpec(type, data, config)

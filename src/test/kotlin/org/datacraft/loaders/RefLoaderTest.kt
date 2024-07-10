@@ -20,7 +20,7 @@ class RefLoaderTest : StringSpec({
             """.trimIndent()
         loader.typeNames() shouldBe listOf("ref")
         val ref = "foo"
-        val spec = basicFieldSpec("ref", ref = ref)
+        val spec = FieldSpec.forType("ref", mapOf("ref" to ref))
         // when
         val supplier = loader.load(spec, testLoader(specWithRef))
         // then
@@ -39,7 +39,7 @@ class RefLoaderTest : StringSpec({
             """.trimIndent()
         loader.typeNames() shouldBe listOf("ref")
         val ref = "foo"
-        val spec = basicFieldSpec("ref", data = ref)
+        val spec = FieldSpec.forType("ref", mapOf("data" to ref))
         // when
         val supplier = loader.load(spec, testLoader(specWithRef))
         // then
@@ -47,13 +47,9 @@ class RefLoaderTest : StringSpec({
     }
 
     "When invalid ref spec SpecException in thrown" {
-        // given
-        val loader = RefLoader()
-        // missing ref or data definition
-        val spec = basicFieldSpec("ref")
-        // when, then
         shouldThrow<SpecException> {
-            loader.load(spec, testLoader())
+            // missing ref or data definition
+            FieldSpec.forType("ref", mapOf())
         }
     }
 })

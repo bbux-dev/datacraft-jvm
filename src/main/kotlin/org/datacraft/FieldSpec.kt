@@ -9,17 +9,17 @@ import java.util.*
  * @property data The data associated with the field, whose format and type can vary depending on the field type.
  * @property config A map of configuration options that can modify how the data is processed or generated.
  */
-sealed class FieldSpec(val type: String, val data: Any?, val ref: Any? = null, val config: Map<String, Any>?) {
+sealed class FieldSpec(val type: String, val data: Any?, val config: Map<String, Any>?) {
 
-    internal class BasicFieldSpec(type: String, data: Any?, ref: Any?, config: Map<String, Any>? = null) : FieldSpec(type, data, ref, config) {
+    internal class BasicFieldSpec(type: String, data: Any?, config: Map<String, Any>? = null) : FieldSpec(type, data, config) {
         override fun toString(): String {
-            return "FieldSpec(type=$type, data=$data, ref=$ref, config=$config)"
+            return "FieldSpec(type=$type, data=$data, config=$config)"
         }
     }
     companion object {
 
-        private fun basic(type: String, data: Any?, ref: Any?, config: Map<String, Any>): FieldSpec {
-            return BasicFieldSpec(type, data, ref, config)
+        private fun basic(type: String, data: Any?, config: Map<String, Any>): FieldSpec {
+            return BasicFieldSpec(type, data, config)
         }
         /**
          * Creates a [FieldSpec] instance for a 'values' type field with the given data and an empty configuration map.
@@ -28,7 +28,7 @@ sealed class FieldSpec(val type: String, val data: Any?, val ref: Any? = null, v
          * @return A new [FieldSpec] instance configured for 'values' type.
          */
         fun values(data: Any): FieldSpec {
-            return BasicFieldSpec("values", data, null, Collections.emptyMap())
+            return BasicFieldSpec("values", data,  Collections.emptyMap())
         }
 
         /**
@@ -38,7 +38,7 @@ sealed class FieldSpec(val type: String, val data: Any?, val ref: Any? = null, v
          * @return A new [FieldSpec] instance configured for 'values' type with list data.
          */
         fun values(data: List<Any?>): FieldSpec {
-            return BasicFieldSpec("values", data, null, Collections.emptyMap())
+            return BasicFieldSpec("values", data,  Collections.emptyMap())
         }
 
         /**
@@ -48,7 +48,7 @@ sealed class FieldSpec(val type: String, val data: Any?, val ref: Any? = null, v
          * @return A new [FieldSpec] instance configured for 'values' type with map data.
          */
         fun values(data: Map<String?, Float?>): FieldSpec {
-            return BasicFieldSpec("values", data, null, Collections.emptyMap())
+            return BasicFieldSpec("values", data, Collections.emptyMap())
         }
 
         fun forType(type: String, rawSpec: Map<String, Any?>): FieldSpec {
@@ -62,7 +62,11 @@ sealed class FieldSpec(val type: String, val data: Any?, val ref: Any? = null, v
                 }
                 return CombineFieldSpec(config, refs, fields)
             }
-            return basic(type, rawSpec["data"], null, config)
+            if (type == "ref") {
+                val ref = rawSpec["ref"] ?: rawSpec["data"] ?: throw SpecException("one of ref or data must be defined for ref specs: $rawSpec")
+                return RefFieldSpec(config, ref.toString())
+            }
+            return basic(type, rawSpec["data"], config)
         }
 
         private fun parseListField(key: String, rawSpec: Map<String, Any?>): List<String> {
@@ -87,4 +91,8 @@ sealed class FieldSpec(val type: String, val data: Any?, val ref: Any? = null, v
 }
 
 internal class CombineFieldSpec(config: Map<String, Any>?, val refs : List<String>, val fields: List<String> ) :
-    FieldSpec("combine", null, null, config)
+    FieldSpec("combine", null,  config)
+
+
+internal class RefFieldSpec(config: Map<String, Any>?, val ref: String) :
+    FieldSpec("ref", null,  config)
