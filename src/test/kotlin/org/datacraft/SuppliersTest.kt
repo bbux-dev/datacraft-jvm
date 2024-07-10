@@ -3,6 +3,7 @@ package org.datacraft
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import org.datacraft.suppliers.WeightedValueSupplier
 
 class SuppliersTest : StringSpec({
     "values should correctly supply a sequence based on the given list" {
@@ -17,6 +18,12 @@ class SuppliersTest : StringSpec({
             supplier.next(5) shouldBe "fyv"
             supplier.next(6) shouldBe "one"
         }
+    }
+
+    "when map should correctly return weighted values" {
+        val data = mapOf("foo" to 0.5, "bar" to 0.5)
+        val supplier: ValueSupplier<Any> = Suppliers.values(data)
+        (supplier is WeightedValueSupplier) shouldBe true
     }
 
     "combine should correctly concatenate values" {

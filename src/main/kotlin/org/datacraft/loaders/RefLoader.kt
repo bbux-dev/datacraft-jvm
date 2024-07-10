@@ -12,7 +12,7 @@ class RefLoader : ValueSupplierLoader<Any> {
         val key = when {
             spec.ref != null -> spec.ref
             spec.data != null -> spec.data
-            else -> throw SpecException("No key found for spec: ${spec.toString()   }")
+            else -> throw SpecException("No key found for spec: $spec")
         }
         return loader.get(key.toString())
     }
