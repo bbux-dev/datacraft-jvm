@@ -13,7 +13,8 @@ internal object Registries {
         "date_stddev_days" to 5.0,
         "outfile_prefix" to "generated",
         "outfile_extension" to "",
-        "data_dir" to "."
+        "data_dir" to ".",
+        "char_class_join_with" to ""
     )
     private val casters = mutableMapOf<String, Caster<Any>>()
 

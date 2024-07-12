@@ -1,6 +1,9 @@
 package org.datacraft
 
+import org.datacraft.casters.IntCaster
+import org.datacraft.casters.StringCaster
 import org.datacraft.models.Caster
+import org.datacraft.models.Distribution
 import org.datacraft.suppliers.*
 
 
@@ -91,6 +94,52 @@ object Suppliers {
 
     fun <T> cast(supplier: ValueSupplier<Any>, caster: Caster<T>): ValueSupplier<T> {
         return CastSupplier(supplier, caster)
+    }
+
+    fun characterClass(data: String, mean: Double? = null, stddev: Double? = null): ValueSupplier<String> {
+
+
+        // Check for 'mean' and 'stddev' to return a stats sampler
+        if (mean != null || stddev != null) {
+            return StringStatSamplerSupplier(data, mean, stddev)
+        }
+
+        // TODO: implement count based sampler
+        return cast(values(data), StringCaster())
+    }
+
+    fun countSupplier(
+        count: Any? = null,
+        countDist: String? = null
+    ): ValueSupplier<Int> {
+        var actualData: Any? = 1
+
+        if (count != null) {
+            actualData = count
+        }
+        if (countDist != null) {
+            actualData = Distributions.fromString(countDist)
+        }
+
+        return when (actualData) {
+            is List<*> -> cast(values(actualData as List<Any>), IntCaster())
+            is Map<*, *> -> cast(values(actualData as Map<String, Double>), IntCaster())
+            is Distribution -> cast(distribution(actualData), IntCaster())
+            else -> try {
+                constant((actualData as? Int ?: actualData.toString().toInt()))
+            } catch (e: NumberFormatException) {
+                throw IllegalArgumentException("Invalid count param: $actualData", e)
+            }
+        }
+    }
+
+    private fun distribution(dist: Distribution): ValueSupplier<Any> {
+        @Suppress("UNCHECKED_CAST")
+        return DistributionSupplier(dist) as ValueSupplier<Any>
+    }
+
+    private fun <T> constant(data: T) : ValueSupplier<T> {
+        return ConstantValueSupplier(data)
     }
 
 }

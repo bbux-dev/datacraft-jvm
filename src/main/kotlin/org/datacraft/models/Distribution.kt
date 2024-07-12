@@ -7,7 +7,7 @@ package org.datacraft.models
 interface Distribution {
     /**
      * Generates the next value according to this distribution.
-     * @return A long value generated based on the distribution's characteristics.
+     * @return A Double value generated based on the distribution's characteristics.
      */
-    fun nextValue(): Long
+    fun nextValue(): Double
 }
