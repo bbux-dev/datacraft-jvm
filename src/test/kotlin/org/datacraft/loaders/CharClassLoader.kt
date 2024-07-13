@@ -48,9 +48,13 @@ class CharClassLoader : ValueSupplierLoader<String> {
             modifiedData = escapeCharacters(modifiedData, escape, escapeStr)
         }
 
-        return Suppliers.characterClass(modifiedData,
+        return Suppliers.characterClass(
+            modifiedData,
             mean = gitConfigAsDouble(config, "mean"),
-            stddev = gitConfigAsDouble(config, "stddev")
+            stddev = gitConfigAsDouble(config, "stddev"),
+            count = gitConfigAsInt(config, "count"),
+            min = gitConfigAsInt(config, "min"),
+            max = gitConfigAsInt(config, "max")
         )
     }
 

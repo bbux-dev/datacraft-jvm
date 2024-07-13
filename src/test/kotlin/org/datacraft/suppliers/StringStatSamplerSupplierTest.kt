@@ -7,8 +7,9 @@ import org.datacraft.ValueSupplier
 class StringStatSamplerSupplierTest : StringSpec({
 
     "when stddev is zero, count is mean" {
-        val supplier : ValueSupplier<String> = StringStatSamplerSupplier(
-            data = "abc123", mean = 3.0
+        val data = "abc123"
+        val supplier : ValueSupplier<String> = StringSamplerSupplier(
+            data = data, StatsCountSupplier(data.length, mean = 3.0)
         )
 
         for (i in 1..10) {

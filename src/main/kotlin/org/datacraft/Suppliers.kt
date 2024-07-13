@@ -96,16 +96,22 @@ object Suppliers {
         return CastSupplier(supplier, caster)
     }
 
-    fun characterClass(data: String, mean: Double? = null, stddev: Double? = null): ValueSupplier<String> {
+    fun characterClass(data: String,
+                       mean: Double? = null,
+                       stddev: Double? = null,
+                       min: Int? = null,
+                       max: Int? = null,
+                       count: Any? = null,
+                       countDist: String? = null): ValueSupplier<String> {
 
 
         // Check for 'mean' and 'stddev' to return a stats sampler
         if (mean != null || stddev != null) {
-            return StringStatSamplerSupplier(data, mean, stddev)
+            val counts = StatsCountSupplier(data.length, mean, stddev, min, max)
+            return StringSamplerSupplier(data, counts)
         }
 
-        // TODO: implement count based sampler
-        return cast(values(data), StringCaster())
+        return StringSamplerSupplier(data, countSupplier(count, countDist))
     }
 
     fun countSupplier(
