@@ -284,6 +284,59 @@ class SpecBuilder {
             parent.addField(fieldName, fieldSpec, isRef)
             return parent
         }
+
+        /**
+         * Builds a ref spec
+         *
+         * @param ref for ref
+         * @param config optional configuration
+         * @return The SpecBuilder instance for chaining.
+         */
+        fun ref(ref: Any, config: Map<String, Any> = emptyMap()): SpecBuilder {
+            val fieldSpec = mapOf(
+                "type" to "ref",
+                "ref" to ref,
+                "config" to config
+            )
+            parent.addField(fieldName, fieldSpec, isRef)
+            return parent
+        }
+
+        /**
+         * Builds a char_class spec
+         *
+         * @param data for char_class
+         * @param config optional configuration
+         * @return The SpecBuilder instance for chaining.
+         */
+        fun charClass(data: Any, config: Map<String, Any> = emptyMap()): SpecBuilder {
+            val fieldSpec = mapOf(
+                "type" to "char_class",
+                "data" to data,
+                "config" to config
+            )
+            parent.addField(fieldName, fieldSpec, isRef)
+            return parent
+        }
+
+        fun charClassAbbrev(ccAbbrev: String, config: Map<String, Any?> = emptyMap()): SpecBuilder {
+            val fieldSpec = mutableMapOf<String, Any>("type" to "char_class_abbrev")
+
+            if (ccAbbrev.startsWith("cc-")) {
+                fieldSpec["type"] = ccAbbrev
+            } else {
+                fieldSpec["type"] = "cc-$ccAbbrev"
+            }
+
+            if (config.isNotEmpty()) {
+                fieldSpec["config"] = config
+            }
+
+            parent.addField(fieldName, fieldSpec.toMap(), isRef)
+            return parent
+        }
+
+
     }
 }
 

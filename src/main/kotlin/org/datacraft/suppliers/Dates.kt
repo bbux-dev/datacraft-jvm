@@ -47,7 +47,7 @@ object Dates {
         val end = args["end"]?.toString()
         val dateFormat = args.getOrDefault("format", Registries.getDefault("date_format")).toString()
         val (startTs, endTs) = generateUniformTimestamps(start, end, offset, durationDays.toInt(), dateFormat)
-        val timestampDistribution = Distributions.Uniform(startTs, endTs)
+        val timestampDistribution = Distributions.Uniform(startTs.toDouble(), endTs.toDouble())
         return Pair(timestampDistribution, dateFormat)
     }
 
@@ -103,7 +103,7 @@ object Dates {
         val centerDate = LocalDateTime.parse(centerDateStr, DateTimeFormatter.ofPattern(dateFormat))
         val mean = centerDate.toEpochSecond(LocalDateTime.now().atZone(ZoneId.systemDefault()).offset)
         val stddev = stddevDays * SECONDS_IN_DAY
-        val distribution = Distributions.Normal(mean, stddev)
+        val distribution = Distributions.Normal(mean.toDouble(), stddev.toDouble())
         return Pair(distribution, dateFormat)
     }
 }
@@ -131,7 +131,7 @@ class DateSupplier(
      * @return A formatted date string as per [dateFormatString].
      */
     override fun next(iteration: Long): String {
-        val randomSeconds = timestampDistribution.nextValue()
+        val randomSeconds = timestampDistribution.nextValue().toLong()
         var nextDate = LocalDateTime.ofInstant(Instant.ofEpochSecond(randomSeconds), ZoneId.systemDefault())
 
         hourSupplier?.let {
@@ -148,7 +148,7 @@ class DateSupplier(
  */
 class EpochDateSupplier(private val distribution: Distribution, private val asMillis: Boolean) : ValueSupplier<Long> {
     override fun next(iteration: Long): Long {
-        val randomSeconds = distribution.nextValue()
+        val randomSeconds = distribution.nextValue().toLong()
         return if (asMillis) {
             randomSeconds*1000
         } else {

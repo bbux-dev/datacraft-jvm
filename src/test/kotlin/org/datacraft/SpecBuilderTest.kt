@@ -80,6 +80,24 @@ class SpecBuilderTest : StringSpec({
         spec.data.shouldNotBeNull()
     }
 
+    "should build DataSpec with ref field" {
+        val sb = SpecBuilder()
+        val spec = sb
+            .ref("foo").values(listOf(1, 2, 3))
+            .field("field").ref("foo")
+            .build()
+
+        spec.data.shouldNotBeNull()
+    }
+
+    "should build DataSpec with char_class field" {
+        val spec : DataSpec = SpecBuilder()
+            .field("lower").charClass("lower")
+            .build()
+
+        spec.data.shouldNotBeNull()
+    }
+
     "should build DataSpec with key defined field" {
         val sb = SpecBuilder()
         val examples = listOf(

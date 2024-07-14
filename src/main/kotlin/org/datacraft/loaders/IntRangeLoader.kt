@@ -3,10 +3,10 @@ package org.datacraft.loaders
 import org.datacraft.*
 import org.datacraft.models.ValueSupplierLoader
 
-class RangeLoader : ValueSupplierLoader<Any> {
+class IntRangeLoader : ValueSupplierLoader<Int> {
     override fun typeNames(): List<String> = listOf("range")
 
-    override fun load(spec: FieldSpec, loader: Loader): ValueSupplier<Any> {
+    override fun load(spec: FieldSpec, loader: Loader): ValueSupplier<Int> {
         if (spec.data == null) {
             throw SpecException("data cannot be null for range spec")
         }
