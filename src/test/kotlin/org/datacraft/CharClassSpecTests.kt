@@ -70,8 +70,8 @@ class CharClassSpecTests : StringSpec({
 
     "test char class multiple classes" {
         val exclude = "CUSTOM"
+        val config = mapOf("exclude" to exclude)
         val spec = SpecBuilder().apply {
-            val config = mapOf("exclude" to exclude)
             field("name").charClass(listOf("lower", "digits", "CUSTOM"), config)
         }.build()
 

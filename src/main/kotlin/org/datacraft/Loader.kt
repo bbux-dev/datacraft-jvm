@@ -1,6 +1,8 @@
 package org.datacraft
 
 import org.datacraft.casters.MultiCaster
+import org.datacraft.loaders.CharClassAbbreviationLoader
+import org.datacraft.loaders.CharClassMappings
 import org.datacraft.models.ValueSupplierLoader
 import org.datacraft.suppliers.CastSupplier
 import org.datacraft.suppliers.DecoratedSupplier
@@ -14,6 +16,10 @@ internal object Loaders {
             for (name in typeLoader.typeNames()) {
                 mapping[name] = typeLoader
             }
+        }
+        // special case for char_class
+        for (key in CharClassMappings.CLASS_MAPPING.keys) {
+            mapping["cc-$key"] = CharClassAbbreviationLoader(key)
         }
         return Loader(spec, mapping, enforceSchema, dataDir)
     }

@@ -3,7 +3,7 @@ package org.datacraft.loaders
 import org.datacraft.*
 import org.datacraft.models.ValueSupplierLoader
 
-class CharClassLoader : ValueSupplierLoader<String> {
+open class CharClassLoader : ValueSupplierLoader<String> {
     override fun typeNames(): List<String> = listOf("char_class")
 
     override fun load(spec: FieldSpec, loader: Loader): ValueSupplier<String> {
@@ -40,15 +40,7 @@ class CharClassLoader : ValueSupplierLoader<String> {
             val exclude = config["exclude"] as String
             modifiedData = excludeCharacters(modifiedData, exclude)
         }
-
-        // Escape characters if 'escape' key exists in config
-        if (config.containsKey("escape")) {
-            val escape = config["escape"] as String
-            val escapeStr = config.getOrDefault("escape_str", "\\") as String
-            modifiedData = escapeCharacters(modifiedData, escape, escapeStr)
-        }
-
-        return Suppliers.characterClass(
+        val supplier = Suppliers.characterClass(
             modifiedData,
             mean = gitConfigAsDouble(config, "mean"),
             stddev = gitConfigAsDouble(config, "stddev"),
@@ -56,21 +48,18 @@ class CharClassLoader : ValueSupplierLoader<String> {
             min = gitConfigAsInt(config, "min"),
             max = gitConfigAsInt(config, "max")
         )
+
+        // Escape characters if 'escape' key exists in config
+        if (config.containsKey("escape")) {
+            val escape = config["escape"] as String
+            val escapeStr = config.getOrDefault("escape_str", "\\") as String
+            val replacements: Map<String, String> = escape.associate { it.toString() to "$escapeStr$it" }
+            return Suppliers.replace(supplier, replacements)
+        }
+        return supplier
     }
 
     private fun excludeCharacters(data: String, exclude: String): String {
         return data.filterNot { it in exclude }
-    }
-
-    private fun escapeCharacters(data: String, escape: String, escapeStr: String): String {
-        val escapedData = StringBuilder()
-        data.forEach { char ->
-            if (char in escape) {
-                escapedData.append(escapeStr).append(char)
-            } else {
-                escapedData.append(char)
-            }
-        }
-        return escapedData.toString()
     }
 }

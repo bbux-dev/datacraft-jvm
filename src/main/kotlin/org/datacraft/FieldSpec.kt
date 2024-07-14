@@ -18,7 +18,7 @@ sealed class FieldSpec(val type: String, val data: Any?, val config: Map<String,
     }
     companion object {
 
-        private fun basic(type: String, data: Any?, config: Map<String, Any>): FieldSpec {
+        fun basic(type: String, data: Any?, config: Map<String, Any>): FieldSpec {
             return BasicFieldSpec(type, data, config)
         }
         /**

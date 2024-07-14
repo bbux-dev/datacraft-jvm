@@ -2,16 +2,16 @@ package org.datacraft.suppliers
 
 import org.datacraft.ValueSupplier
 
-class RangeSupplier(
+internal class IntRangeSupplier(
     private val start: Int,
     private val end: Int,
-    private val step: Int
-) : ValueSupplier<Any> {
+    private val step: Int? = 1
+) : ValueSupplier<Int> {
     private var current = start
 
-    override fun next(iteration: Long): Any {
+    override fun next(iteration: Long): Int {
         val result = current
-        current+=step
+        current += step ?: 1
         if (current > end) {
             current = start
         }

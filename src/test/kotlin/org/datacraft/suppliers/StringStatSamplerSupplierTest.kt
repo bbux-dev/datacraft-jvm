@@ -9,7 +9,7 @@ class StringStatSamplerSupplierTest : StringSpec({
     "when stddev is zero, count is mean" {
         val data = "abc123"
         val supplier : ValueSupplier<String> = StringSamplerSupplier(
-            data = data, StatsCountSupplier(data.length, mean = 3.0)
+            data = data, StatsCountSupplier(data.length, mean = 3.0, stddev = 0.0)
         )
 
         for (i in 1..10) {

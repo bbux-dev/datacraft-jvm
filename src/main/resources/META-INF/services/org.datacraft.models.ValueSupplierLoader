@@ -7,7 +7,7 @@ org.datacraft.loaders.ValuesLoader
 org.datacraft.loaders.RefLoader
 org.datacraft.loaders.WeightedRefLoader
 org.datacraft.loaders.CombineLoader
-org.datacraft.loaders.RangeLoader
+org.datacraft.loaders.IntRangeLoader
 org.datacraft.loaders.RandomRangeLoader
 org.datacraft.loaders.RandomIntRangeLoader
 org.datacraft.loaders.UuidLoader
