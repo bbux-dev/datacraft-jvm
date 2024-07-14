@@ -5,7 +5,24 @@ import org.datacraft.models.Caster
 import org.datacraft.models.Distribution
 import org.datacraft.suppliers.*
 
-
+/**
+ * A utility class that provides various suppliers for generating values.
+ *
+ * The `Suppliers` class contains static methods for creating instances of `ValueSupplier` with different behaviors,
+ * such as generating values within a range, sampling from a list, or applying string replacements.
+ * Each supplier can be used to generate values based on specific criteria or transformations.
+ *
+ * Some available suppliers include:
+ * - `range`: Generates integer values within a specified range with a given step.
+ * - `randomRange`: Generates random double values within a specified range.
+ * - `functionSupplier`: Generates values by applying a provided function to the current iteration count.
+ * - `sample`: Generates values by randomly sampling from a provided list.
+ * - `ipV4Address`: Generates IPv4 addresses based on a specified CIDR block.
+ * - `cast`: Converts values from one type to another using a provided caster.
+ * - `characterClass`: Generates strings by sampling from character data with optional statistical parameters.
+ * - `countSupplier`: Generates integer values based on a provided count or count distribution.
+ * - `replace`: Generates values by applying replacements to the output of another supplier.
+ */
 object Suppliers {
     /**
      * Creates a [ValueSupplier] based on the provided [FieldSpec]. This function supports creating different types of [ValueSupplier]
