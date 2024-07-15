@@ -66,6 +66,11 @@ sealed class FieldSpec(val type: String, val data: Any?, val config: Map<String,
                 val ref = rawSpec["ref"] ?: rawSpec["data"] ?: throw SpecException("one of ref or data must be defined for ref specs: $rawSpec")
                 return RefFieldSpec(config, ref.toString())
             }
+            if (type == "replace") {
+                val ref = rawSpec["ref"] ?: throw SpecException("ref and data must be defined for replace specs: $rawSpec")
+                val data = rawSpec["data"] ?: throw SpecException("ref and data must be defined for replace specs: $rawSpec")
+                return ReplaceFieldSpec(config, ref.toString(), data)
+            }
             return basic(type, rawSpec["data"], config)
         }
 
@@ -96,3 +101,6 @@ internal class CombineFieldSpec(config: Map<String, Any>?, val refs : List<Strin
 
 internal class RefFieldSpec(config: Map<String, Any>?, val ref: String) :
     FieldSpec("ref", null,  config)
+
+internal class ReplaceFieldSpec(config: Map<String, Any>?, val ref: String, data: Any?) :
+    FieldSpec("ref", data,  config)

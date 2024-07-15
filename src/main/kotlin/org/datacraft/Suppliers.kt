@@ -270,9 +270,23 @@ object Suppliers {
      * @param wrapped The original `ValueSupplier` providing values to be processed.
      * @param replacements A map of substrings to their replacement values.
      * @return Returns a `ValueSupplier<String>` that supplies string values with replacements applied.
+     *
+     * @sample org.datacraft.Suppliers.sampleReplaceUsage
      */
-    fun replace(wrapped: ValueSupplier<*>, replacements: Map<String, String>): ValueSupplier<String> {
-        return ReplaceSupplier(wrapped, replacements)
+    fun replace(wrapped: ValueSupplier<*>, replacements: Map<String, Any>): ValueSupplier<String> {
+        val valueSuppliers: Map<String, ValueSupplier<Any>> = replacements.map { (key, value) ->
+            key to values(value)
+        }.toMap()
+        return ReplaceSupplier(wrapped, valueSuppliers)
     }
 
+    /** Examples **/
+
+    @JvmStatic
+    internal fun sampleReplaceUsage() {
+        val wrappedSupplier: ValueSupplier<Any> = Suppliers.values(listOf("@one$", "@two$", "@tre$"))
+        val replacements = mapOf("@" to "AT:", "$" to "")
+        val replaceSupplier = Suppliers.replace(wrappedSupplier, replacements)
+        println(replaceSupplier.next(1))
+    }
 }

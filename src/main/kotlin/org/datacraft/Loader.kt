@@ -26,7 +26,9 @@ internal object Loaders {
 
     fun configuredTypes(): List<String> {
         val serviceLoader = ServiceLoader.load(ValueSupplierLoader::class.java)
-        return serviceLoader.flatMap { e -> e.typeNames() }
+        val types = serviceLoader.flatMap { e -> e.typeNames() }
+        val charClassAbbreviations = CharClassMappings.CLASS_MAPPING.keys.map { "cc-$it" }
+        return types + charClassAbbreviations
     }
 }
 
