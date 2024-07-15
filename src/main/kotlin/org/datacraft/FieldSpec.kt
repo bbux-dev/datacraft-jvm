@@ -66,6 +66,15 @@ sealed class FieldSpec(val type: String, val data: Any?, val config: Map<String,
                 val ref = rawSpec["ref"] ?: rawSpec["data"] ?: throw SpecException("one of ref or data must be defined for ref specs: $rawSpec")
                 return RefFieldSpec(config, ref.toString())
             }
+            if (type == "ref_list") {
+                val refs = rawSpec["refs"] ?: rawSpec["data"] ?: throw SpecException("one of refs or data must be defined for ref_list specs: $rawSpec")
+                val refList: List<String> = when (refs) {
+                    is String -> listOf(refs)
+                    is List<*> -> if (refs.all { it is String }) refs.filterIsInstance<String>() else throw SpecException("refs or data must be a list of strings: $rawSpec")
+                    else -> throw SpecException("refs or data must be a string or a list of strings: $rawSpec")
+                }
+                return RefListFieldSpec(config, refList)
+            }
             if (type == "replace") {
                 val ref = rawSpec["ref"] ?: throw SpecException("ref and data must be defined for replace specs: $rawSpec")
                 val data = rawSpec["data"] ?: throw SpecException("ref and data must be defined for replace specs: $rawSpec")
@@ -101,6 +110,10 @@ internal class CombineFieldSpec(config: Map<String, Any>?, val refs : List<Strin
 
 internal class RefFieldSpec(config: Map<String, Any>?, val ref: String) :
     FieldSpec("ref", null,  config)
+
+
+internal class RefListFieldSpec(config: Map<String, Any>?, val refs: List<String>) :
+    FieldSpec("ref_list", null,  config)
 
 internal class ReplaceFieldSpec(config: Map<String, Any>?, val ref: String, data: Any?) :
     FieldSpec("ref", data,  config)

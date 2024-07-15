@@ -7,7 +7,7 @@ class CombineSupplier(private val suppliers: List<ValueSupplier<*>>,
                       private val asList: Boolean?) : ValueSupplier<Any> {
     override fun next(iteration: Long): Any {
         val results = suppliers.map { supplier ->
-            supplier.next(iteration).toString()
+            supplier.next(iteration)
         }
         if (asList == true) {
             return results
