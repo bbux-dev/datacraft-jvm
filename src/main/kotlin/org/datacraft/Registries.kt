@@ -14,7 +14,9 @@ internal object Registries {
         "outfile_prefix" to "generated",
         "outfile_extension" to "",
         "data_dir" to ".",
-        "char_class_join_with" to ""
+        "char_class_join_with" to "",
+        "combine_as_list" to false,
+        "combine_join_with" to ""
     )
     private val casters = mutableMapOf<String, Caster<Any>>()
 

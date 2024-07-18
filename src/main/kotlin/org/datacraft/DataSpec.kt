@@ -46,7 +46,7 @@ class DataSpec(
                 record[entry.key] = value
             }
             output?.finishedRecord(count, null, excludeInternal)
-            if (count == iterations - 1) {
+            if (count == iterations) {
                 output?.finishedIterations()
             }
             return record

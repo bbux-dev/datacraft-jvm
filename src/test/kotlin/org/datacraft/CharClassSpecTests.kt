@@ -1,12 +1,11 @@
+package org.datacraft
+
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.ints.shouldBeInRange
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.types.shouldBeInstanceOf
-import org.datacraft.DataSpec
-import org.datacraft.SpecBuilder
 import org.datacraft.loaders.CharClassMappings.CLASS_MAPPING
 
 
@@ -101,7 +100,7 @@ class CharClassSpecTests : StringSpec({
     "test char class special escape" {
         val escape = "&?!"
         val spec = SpecBuilder().apply {
-            val config = mapOf("escape" to escape, "escapeStr" to "ESCAPED:")
+            val config = mapOf("escape" to escape, "escape_str" to "ESCAPED:")
             field("name").charClass("special", config)
         }.build()
 

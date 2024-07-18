@@ -85,6 +85,7 @@ object Suppliers {
     ): ValueSupplier<Any> {
         return CombineSupplier(suppliers, joinWith, asList)
     }
+
     /**
      * Creates a `RangeSupplier` that generates values within a specified range.
      *
@@ -99,9 +100,11 @@ object Suppliers {
     fun range(start: Int, end: Int, step: Int? = 1): ValueSupplier<Int> {
         return IntRangeSupplier(start, end, step)
     }
+
     fun range(range: IntRange, step: Int? = 1): ValueSupplier<Int> {
         return IntRangeSupplier(range.start, range.last, step)
     }
+
     /**
      * Creates a `ValueSupplier` that generates random values within a specified range.
      *
@@ -278,6 +281,40 @@ object Suppliers {
             key to values(value)
         }.toMap()
         return ReplaceSupplier(wrapped, valueSuppliers)
+    }
+
+    /**
+     * Returns a supplier that rotates through the provided suppliers incrementally.
+     *
+     * @param supplierList The list of suppliers to rotate through.
+     * @param modulateIteration If the iteration number should be modulated by the index of the supplier.
+     * @return A supplier for these suppliers.
+     *
+     * Examples:
+     * ```
+     * val nicePetSupplier = Suppliers.values(listOf("dog", "cat", "hamster", "pig", "rabbit", "horse"))
+     * val meanPetSupplier = Suppliers.values(listOf("alligator", "cobra", "mongoose", "killer bee"))
+     * val petSupplier = Suppliers.fromListOfSuppliers(listOf(nicePetSupplier, meanPetSupplier))
+     * println(petSupplier.next(0))  // Output: "dog"
+     * println(petSupplier.next(1))  // Output: "alligator"
+     * ```
+     */
+    fun fromListOfSuppliers(
+        supplierList: List<ValueSupplier<Any>>,
+        modulateIteration: Boolean = true
+    ): ValueSupplier<Any> {
+        return RotatingSupplierList(supplierList, modulateIteration)
+    }
+
+    internal class RotatingSupplierList(
+        private val supplierList: List<ValueSupplier<Any>>,
+        private val modulateIteration: Boolean
+    ) : ValueSupplier<Any> {
+
+        override fun next(iteration: Long): Any {
+            val index = if (modulateIteration) (iteration % supplierList.size).toInt() else iteration.toInt()
+            return supplierList[index].next(iteration)
+        }
     }
 
     /** Examples **/

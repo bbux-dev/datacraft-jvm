@@ -8,6 +8,7 @@ org.datacraft.loaders.RefLoader
 org.datacraft.loaders.RefListLoader
 org.datacraft.loaders.WeightedRefLoader
 org.datacraft.loaders.CombineLoader
+org.datacraft.loaders.CombineListLoader
 org.datacraft.loaders.IntRangeLoader
 org.datacraft.loaders.RandomRangeLoader
 org.datacraft.loaders.RandomIntRangeLoader
