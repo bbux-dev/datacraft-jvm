@@ -37,8 +37,18 @@ class KeySuppliers {
             TODO("Not yet implemented")
         }
 
-        private fun createWeightedKeyProvider(keys: List<String>, map: Map<Float, List<String>>): KeyProvider {
-            TODO("Not yet implemented")
+        private fun createWeightedKeyProvider(keys: List<String>, fieldGroups: Map<Float, List<String>>): KeyProvider {
+            val flatValueKeys = fieldGroups.values.flatten()
+            // Ensure all elements in flattenedFieldGroups exist in keys
+            val notInKeys = flatValueKeys.filterNot { it in keys }
+            if (notInKeys.isNotEmpty()) {
+                throw SpecException("All elements in fieldGroups must exist in Data Spec. Undefined keys: $notInKeys")
+            }
+            // want to create mapping of weight to index
+            val weights = fieldGroups.keys.withIndex().associate { it.index.toString() to it.value }
+            val supplier = WeightedValueSupplier(weights)
+            val remappedFieldGroups = fieldGroups.entries.withIndex().associate { it.index.toString() to it.value.value }
+            return WeightedGroupKeyProvider(remappedFieldGroups, supplier)
         }
 
         @Suppress("UNCHECKED_CAST")

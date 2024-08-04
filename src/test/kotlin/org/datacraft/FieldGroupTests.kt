@@ -82,6 +82,43 @@ class FieldGroupTests : StringSpec({
         }
     }
 
+    "should be valid with weighted field groups" {
+        val json = """
+        {
+          "foo": { "type": "uuid" },
+          "bar": { "type": "uuid" },
+          "baz": { "type": "uuid" },
+          "field_groups": {
+            "0.500001": ["foo", "bar"],
+            "0.500002": ["bar", "baz"]
+          }
+        }
+        """
+
+        val entries = Datacraft.entries(json, 100)
+
+        val uniqueKeys = entries.flatMap { it.keys }.toSet()
+
+        uniqueKeys.size shouldBe 3
+    }
+
+    "should throw spec exception when not all elements resolvable in weighted lists" {
+        val json = """
+        {
+          "foo": { "type": "uuid" },
+          "bar": { "type": "uuid" },
+          "baz": { "type": "uuid" },
+          "field_groups": {
+            "0.500001": ["foo", "bar"],
+            "0.500002": ["barf", "baz"]
+          }
+        }
+        """
+        shouldThrow<SpecException> {
+            Datacraft.entries(json, 4)
+        }
+    }
+
     "should throw spec exception with values not list in weighted field groups" {
         val json = """
         {
