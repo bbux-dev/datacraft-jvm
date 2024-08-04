@@ -18,7 +18,7 @@ class KeySuppliers {
                             .mapKeys { it.key.toString().toFloat() }
                             .mapValues { entry ->
                                 when (val value = entry.value) {
-                                    is List<*> -> value.filterIsInstance<String>()
+                                    is List<*> -> value.map { it.toString() }
                                     else -> throw SpecException("Unsupported field group value type ${value?.let { it::class.simpleName } ?: "null"}")
                                 }
                             }

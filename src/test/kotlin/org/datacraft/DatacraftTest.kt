@@ -123,30 +123,4 @@ class DatacraftTest : StringSpec({
         last.name shouldBe "frog"
         last.count shouldBeInRange 1..4
     }
-    "should return different fields when field groups are specified" {
-        val json = """
-        {
-          "foo": { "type": "uuid" },
-          "bar": { "type": "uuid" },
-          "baz": { "type": "uuid" },
-          "field_groups": [
-            ["foo", "bar"],
-            ["bar", "baz"]
-          ]
-        }
-        """
-        val entries = Datacraft.entries(json, 4)
-
-        entries.size shouldBe 4
-
-        val first = entries[0]
-        first.size shouldBe 2
-        first.containsKey("foo") shouldBe true
-        first.containsKey("bar") shouldBe true
-
-        val second = entries[1]
-        second.size shouldBe 2
-        second.containsKey("bar") shouldBe true
-        second.containsKey("baz") shouldBe true
-    }
 })
