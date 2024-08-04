@@ -41,6 +41,7 @@ class Loader(
 
     private val cache = mutableMapOf<String, ValueSupplier<Any>>()
 
+    @Suppress("UNCHECKED_CAST")
     fun get(field: String): ValueSupplier<Any> {
         // check cache first
         cache[field]?.let { return it }
@@ -63,7 +64,6 @@ class Loader(
         if (isDecorated(config)) {
             supplier = DecoratedSupplier(supplier = supplier, config = config)
         }
-        @Suppress("UNCHECKED_CAST")
         cache[field] = supplier as ValueSupplier<Any>
         return supplier
     }

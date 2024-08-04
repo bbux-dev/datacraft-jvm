@@ -1,5 +1,10 @@
 package org.datacraft
 
+import org.datacraft.models.KeyProvider
+import org.datacraft.suppliers.KeyListProvider
+import org.datacraft.suppliers.MappedKeyListProvider
+import org.datacraft.suppliers.RotatingKeyListProvider
+
 
 /**
  * SpecBuilder is a builder class for creating DataSpec objects.
@@ -11,6 +16,8 @@ class SpecBuilder {
 
     private val fields: MutableMap<String, FieldSpec> = mutableMapOf()
     private val refs: MutableMap<String, FieldSpec> = mutableMapOf()
+    private val fieldGroupMap: MutableMap<String, List<String>> = mutableMapOf()
+    private val fieldGroupLists: MutableList<List<String>> = mutableListOf()
 
     /**
      * Defines a field with a specification.
@@ -94,7 +101,17 @@ class SpecBuilder {
      * @return The DataSpec object.
      */
     fun build(): DataSpec {
-        return DataSpec(fields, refs)
+        if (fieldGroupMap.isNotEmpty() && fieldGroupLists.isNotEmpty()) {
+            throw SpecException("Cannot use both unnamed and named field groups")
+        }
+        val keyProvider : KeyProvider = if (fieldGroupLists.isNotEmpty()) {
+            RotatingKeyListProvider(fieldGroupLists)
+        } else if (fieldGroupMap.isNotEmpty()) {
+            MappedKeyListProvider(fieldGroupMap)
+        } else {
+            KeyListProvider(fields.keys.toList())
+        }
+        return DataSpec(fields, refs, keyProvider)
     }
 
     internal fun addField(fieldName: String, fieldSpec: Map<String, Any>, isRef: Boolean) {
@@ -105,6 +122,33 @@ class SpecBuilder {
         } else {
             fields[fieldName] = spec
         }
+    }
+
+    /**
+     * Add a single field group.
+     *
+     * @param fieldGroup the field group to add
+     * @return this for chaining invocations
+     */
+    fun addFieldGroup(fieldGroup: List<String>): SpecBuilder {
+        fieldGroupLists.add(fieldGroup)
+        return this
+    }
+
+    /**
+     * Add a single field group.
+     *
+     * @param key: name of field group
+     * @param fieldGroup the field group to add
+     * @return this for chaining invocations
+     */
+    fun addFieldGroup(key: String, fieldGroup: List<String>): SpecBuilder {
+        fieldGroupMap[key] = fieldGroup
+        return this
+    }
+
+    fun weightedFieldGroup(weight: Double, fieldGroup: List<String>) {
+        fieldGroupMap[weight.toString()] = fieldGroup
     }
 
     /**
