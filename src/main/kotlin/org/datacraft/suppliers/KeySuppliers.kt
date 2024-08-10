@@ -34,7 +34,21 @@ class KeySuppliers {
         }
 
         private fun parseNamedFieldGroups(keys: List<String>, fieldGroups: Map<*, *>): KeyProvider {
-            TODO("Not yet implemented")
+            val map = fieldGroups
+                .mapKeys { it.value.toString() }
+                .mapValues { entry ->
+                    when (val value = entry.value) {
+                        is List<*> -> value.map { it.toString() }
+                        else -> throw SpecException("Unsupported field group value type ${value?.let { it::class.simpleName } ?: "null"}")
+                    }
+                }
+            val flatValueKeys = map.values.flatten()
+            // Ensure all elements in flattenedFieldGroups exist in keys
+            val notInKeys = flatValueKeys.filterNot { it in keys }
+            if (notInKeys.isNotEmpty()) {
+                throw SpecException("All elements in fieldGroups must exist in Data Spec. Undefined keys: $notInKeys")
+            }
+            return MappedKeyListProvider(map)
         }
 
         private fun createWeightedKeyProvider(keys: List<String>, fieldGroups: Map<Float, List<String>>): KeyProvider {
