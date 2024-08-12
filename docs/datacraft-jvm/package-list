@@ -10,6 +10,8 @@ $dokka.location:org.datacraft.models/Formatter///PointingToDeclaration/datacraf
 $dokka.location:org.datacraft.models/Formatter/format/#kotlin.collections.List[kotlin.collections.Map[kotlin.String,kotlin.Any?]]/PointingToDeclaration/datacraft-jvm/org.datacraft.models/-formatter/format.html
 $dokka.location:org.datacraft.models/Formatter/format/#kotlin.collections.Map[kotlin.String,kotlin.Any?]/PointingToDeclaration/datacraft-jvm/org.datacraft.models/-formatter/format.html
 $dokka.location:org.datacraft.models/Formatter/name/#/PointingToDeclaration/datacraft-jvm/org.datacraft.models/-formatter/name.html
+$dokka.location:org.datacraft.models/KeyProvider///PointingToDeclaration/datacraft-jvm/org.datacraft.models/-key-provider/index.html
+$dokka.location:org.datacraft.models/KeyProvider/get/#/PointingToDeclaration/datacraft-jvm/org.datacraft.models/-key-provider/get.html
 $dokka.location:org.datacraft.models/RecordProcessor///PointingToDeclaration/datacraft-jvm/org.datacraft.models/-record-processor/index.html
 $dokka.location:org.datacraft.models/RecordProcessor/process/#kotlin.collections.List[kotlin.collections.Map[kotlin.String,kotlin.Any]]/PointingToDeclaration/datacraft-jvm/org.datacraft.models/-record-processor/process.html
 $dokka.location:org.datacraft.models/RecordProcessor/process/#kotlin.collections.Map[kotlin.String,kotlin.Any]/PointingToDeclaration/datacraft-jvm/org.datacraft.models/-record-processor/process.html
@@ -23,11 +25,12 @@ $dokka.location:org.datacraft/DataSpec.Companion/fieldSpecFrom/#kotlin.Any?/Poin
 $dokka.location:org.datacraft/DataSpec.Companion/parse/#kotlin.collections.Map[kotlin.String,kotlin.Any?]/PointingToDeclaration/datacraft-jvm/org.datacraft/-data-spec/-companion/parse.html
 $dokka.location:org.datacraft/DataSpec.Companion/parseString/#kotlin.String/PointingToDeclaration/datacraft-jvm/org.datacraft/-data-spec/-companion/parse-string.html
 $dokka.location:org.datacraft/DataSpec///PointingToDeclaration/datacraft-jvm/org.datacraft/-data-spec/index.html
-$dokka.location:org.datacraft/DataSpec/DataSpec/#kotlin.collections.Map[kotlin.String,org.datacraft.FieldSpec]#kotlin.collections.Map[kotlin.String,org.datacraft.FieldSpec]#kotlin.Boolean#kotlin.String/PointingToDeclaration/datacraft-jvm/org.datacraft/-data-spec/-data-spec.html
+$dokka.location:org.datacraft/DataSpec/DataSpec/#kotlin.collections.Map[kotlin.String,org.datacraft.FieldSpec]#kotlin.collections.Map[kotlin.String,org.datacraft.FieldSpec]#org.datacraft.models.KeyProvider#kotlin.Boolean#kotlin.String/PointingToDeclaration/datacraft-jvm/org.datacraft/-data-spec/-data-spec.html
 $dokka.location:org.datacraft/DataSpec/data/#/PointingToDeclaration/datacraft-jvm/org.datacraft/-data-spec/data.html
 $dokka.location:org.datacraft/DataSpec/entries/#kotlin.Long#org.datacraft.OutputHandlerInterface?#kotlin.Boolean/PointingToDeclaration/datacraft-jvm/org.datacraft/-data-spec/entries.html
 $dokka.location:org.datacraft/DataSpec/generateRecords/#kotlin.Long#java.lang.Class[TypeParam(bounds=[kotlin.Any?])]#org.datacraft.OutputHandlerInterface?#kotlin.Boolean/PointingToDeclaration/datacraft-jvm/org.datacraft/-data-spec/generate-records.html
 $dokka.location:org.datacraft/DataSpec/generator/#kotlin.Long#org.datacraft.OutputHandlerInterface?#kotlin.Boolean/PointingToDeclaration/datacraft-jvm/org.datacraft/-data-spec/generator.html
+$dokka.location:org.datacraft/DataSpec/keyProvider/#/PointingToDeclaration/datacraft-jvm/org.datacraft/-data-spec/key-provider.html
 $dokka.location:org.datacraft/DataSpec/recordEntries/#kotlin.Long#java.lang.Class[TypeParam(bounds=[kotlin.Any?])]#org.datacraft.OutputHandlerInterface?#kotlin.Boolean/PointingToDeclaration/datacraft-jvm/org.datacraft/-data-spec/record-entries.html
 $dokka.location:org.datacraft/DataSpec/refs/#/PointingToDeclaration/datacraft-jvm/org.datacraft/-data-spec/refs.html
 $dokka.location:org.datacraft/Datacraft///PointingToDeclaration/datacraft-jvm/org.datacraft/-datacraft/index.html
@@ -82,11 +85,14 @@ $dokka.location:org.datacraft/SpecBuilder.FieldBuilder/values/#kotlin.collection
 $dokka.location:org.datacraft/SpecBuilder.FieldBuilder/values/#kotlin.collections.Map[kotlin.String,kotlin.Number]#kotlin.collections.Map[kotlin.String,kotlin.Any]/PointingToDeclaration/datacraft-jvm/org.datacraft/-spec-builder/-field-builder/values.html
 $dokka.location:org.datacraft/SpecBuilder///PointingToDeclaration/datacraft-jvm/org.datacraft/-spec-builder/index.html
 $dokka.location:org.datacraft/SpecBuilder/SpecBuilder/#/PointingToDeclaration/datacraft-jvm/org.datacraft/-spec-builder/-spec-builder.html
+$dokka.location:org.datacraft/SpecBuilder/addFieldGroup/#kotlin.String#kotlin.collections.List[kotlin.String]/PointingToDeclaration/datacraft-jvm/org.datacraft/-spec-builder/add-field-group.html
+$dokka.location:org.datacraft/SpecBuilder/addFieldGroup/#kotlin.collections.List[kotlin.String]/PointingToDeclaration/datacraft-jvm/org.datacraft/-spec-builder/add-field-group.html
 $dokka.location:org.datacraft/SpecBuilder/build/#/PointingToDeclaration/datacraft-jvm/org.datacraft/-spec-builder/build.html
 $dokka.location:org.datacraft/SpecBuilder/field/#kotlin.String/PointingToDeclaration/datacraft-jvm/org.datacraft/-spec-builder/field.html
 $dokka.location:org.datacraft/SpecBuilder/fieldByKey/#kotlin.String#kotlin.Any?#kotlin.collections.Map[kotlin.String,kotlin.Any]/PointingToDeclaration/datacraft-jvm/org.datacraft/-spec-builder/field-by-key.html
 $dokka.location:org.datacraft/SpecBuilder/ref/#kotlin.String/PointingToDeclaration/datacraft-jvm/org.datacraft/-spec-builder/ref.html
 $dokka.location:org.datacraft/SpecBuilder/refByKey/#kotlin.String#kotlin.Any?#kotlin.collections.Map[kotlin.String,kotlin.Any]/PointingToDeclaration/datacraft-jvm/org.datacraft/-spec-builder/ref-by-key.html
+$dokka.location:org.datacraft/SpecBuilder/weightedFieldGroup/#kotlin.Double#kotlin.collections.List[kotlin.String]/PointingToDeclaration/datacraft-jvm/org.datacraft/-spec-builder/weighted-field-group.html
 $dokka.location:org.datacraft/SpecException///PointingToDeclaration/datacraft-jvm/org.datacraft/-spec-exception/index.html
 $dokka.location:org.datacraft/SpecException/SpecException/#kotlin.String#kotlin.Throwable/PointingToDeclaration/datacraft-jvm/org.datacraft/-spec-exception/-spec-exception.html
 $dokka.location:org.datacraft/SpecException/SpecException/#kotlin.String/PointingToDeclaration/datacraft-jvm/org.datacraft/-spec-exception/-spec-exception.html
@@ -95,6 +101,7 @@ $dokka.location:org.datacraft/Suppliers/cast/#org.datacraft.ValueSupplier[kotlin
 $dokka.location:org.datacraft/Suppliers/characterClass/#kotlin.String#kotlin.Double?#kotlin.Double?#kotlin.Int?#kotlin.Int?#kotlin.Any?#kotlin.String?/PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/character-class.html
 $dokka.location:org.datacraft/Suppliers/combine/#kotlin.collections.List[org.datacraft.ValueSupplier[*]]#kotlin.String?#kotlin.Boolean?/PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/combine.html
 $dokka.location:org.datacraft/Suppliers/countSupplier/#kotlin.Any?#kotlin.String?/PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/count-supplier.html
+$dokka.location:org.datacraft/Suppliers/fromListOfSuppliers/#kotlin.collections.List[org.datacraft.ValueSupplier[kotlin.Any]]#kotlin.Boolean/PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/from-list-of-suppliers.html
 $dokka.location:org.datacraft/Suppliers/functionSupplier/#kotlin.Function1[kotlin.Long,TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/function-supplier.html
 $dokka.location:org.datacraft/Suppliers/ipV4Address/#kotlin.String?/PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/ip-v4-address.html
 $dokka.location:org.datacraft/Suppliers/randomRange/#kotlin.Double#kotlin.Double/PointingToDeclaration/datacraft-jvm/org.datacraft/-suppliers/random-range.html
