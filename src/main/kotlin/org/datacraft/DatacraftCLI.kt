@@ -73,7 +73,6 @@ internal class DatacraftCLI : CliktCommand(help = "Run datacraft.") {
         val output: OutputHandlerInterface = getOutput(processor, writer)
         try {
             val gen = spec.generator(iterations, output = output, excludeInternal = excludeInternal)
-            println("hasNext: ${gen.hasNext()}")
             while (gen.hasNext()) {
                 gen.next()
             }

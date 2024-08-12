@@ -2,6 +2,8 @@ package org.datacraft
 
 import com.google.gson.Gson
 import kotlinx.serialization.json.Json
+import org.datacraft.models.KeyProvider
+import org.datacraft.suppliers.KeySuppliers
 import java.util.*
 
 /**
@@ -12,6 +14,7 @@ import java.util.*
 class DataSpec(
     val data: Map<String, FieldSpec>,
     val refs: Map<String, FieldSpec>,
+    val keyProvider: KeyProvider,
     enforceSchema: Boolean = false,
     dataDir: String = Registries.getDefault("data_dir")
 ) {
@@ -40,12 +43,14 @@ class DataSpec(
             count++
 
             val record: MutableMap<String, Any> = mutableMapOf()
-            for (entry in data.entries) {
-                val value = loader.get(entry.key).next(count)
-                output?.handle(entry.key, value)
-                record[entry.key] = value
+
+            val groupKeys = keyProvider.get();
+            for (key in groupKeys.second) {
+                val value = loader.get(key).next(count)
+                output?.handle(key, value)
+                record[key] = value
             }
-            output?.finishedRecord(count, null, excludeInternal)
+            output?.finishedRecord(count, groupKeys.first, excludeInternal)
             if (count == iterations) {
                 output?.finishedIterations()
             }
@@ -142,24 +147,29 @@ class DataSpec(
          */
         fun parse(raw: Map<String, Any?>): DataSpec {
             val parsed = parseRaw(raw)
-            return DataSpec(parsed.first, parsed.second)
+            return DataSpec(parsed.first, parsed.second, parsed.third)
         }
 
-        private fun parseRaw(raw: Map<String, Any?>): Pair<MutableMap<String, FieldSpec>, MutableMap<String, FieldSpec>> {
+        private fun parseRaw(raw: Map<String, Any?>): Triple<Map<String, FieldSpec>, Map<String, FieldSpec>, KeyProvider> {
             val specs = mutableMapOf<String, FieldSpec>()
             val refs = mutableMapOf<String, FieldSpec>()
+            val fieldGroups = raw["field_groups"]
             raw.forEach { (key, value) ->
-                if (key.equals("refs", ignoreCase = true)) {
+                if (key == "refs") {
                     if (value is String) {
                         refs.putAll(parseString(value).data)
                     } else {
                         refs.putAll(parse(value as Map<String, Any?>).data)
                     }
+                } else if (key == "field_groups") {
+                    // skip for later
                 } else {
                     specs[key] = fieldSpecFrom(value) ?: throw SpecException("Invalid value for FieldSpec $value")
                 }
             }
-            return Pair(specs, refs)
+            val keyProvider : KeyProvider = KeySuppliers.fromFieldGroup(specs.keys.toList(), fieldGroups)
+
+            return Triple(specs, refs, keyProvider)
         }
 
         /**

@@ -70,8 +70,9 @@ sealed class FieldSpec(val type: String, val data: Any?, val config: Map<String,
 
                 @Suppress("UNCHECKED_CAST")
                 val refsList = refs as? List<List<String>>
-                    ?: throw SpecException("refs pointer must be list of lists: i.e [[\"ONE\", \"TWO\"]]. $rawSpec")
+                    ?: throw SpecException("refs pointer must be list of lists: e.g: [[\"ONE\", \"TWO\"]]. $rawSpec")
 
+                // or check for unit tests, since above cast will work with bad data
                 if (refsList.isEmpty() || refsList[0] !is List) {
                     throw SpecException("refs list must contain at least one list. $rawSpec")
                 }

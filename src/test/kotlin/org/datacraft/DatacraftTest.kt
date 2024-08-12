@@ -66,12 +66,12 @@ class DatacraftTest : StringSpec({
         first.count shouldBeInRange 1..4
     }
     "should generate entries from JSON string" {
-        var json = """
+        val json = """
         {
           "id": { "type": "uuid" },
           "ts:date.iso": {}
         }
-        """;
+        """
         val entries = Datacraft.entries(json, 5)
 
         entries.size shouldBe 5

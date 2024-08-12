@@ -34,16 +34,16 @@ object Suppliers {
      * @param data The data for the [ValueSupplier].
      * @return A [ValueSupplier] instance capable of supplying values for this type of data (list, constant, wighted)
      */
+    @Suppress("UNCHECKED_CAST")
     fun values(data: Any): ValueSupplier<Any> {
         return when (data) {
             is List<*> -> {
-                @Suppress("UNCHECKED_CAST")
-                (ListValueSupplier(data as List<Any>))
+                ListValueSupplier(data as List<Any>)
             }
 
             is Map<*, *> -> {
-                @Suppress("UNCHECKED_CAST")
-                (WeightedValueSupplier(data as Map<Any, Any>))
+                val remapped = data.mapValues { it.value.toString().toFloat() }
+                WeightedValueSupplier(remapped as Map<Any, Number>)
             }
 
             else -> {
@@ -226,6 +226,7 @@ object Suppliers {
      * @param countDist Optional count distribution as a string.
      * @return Returns a `ValueSupplier<Int>` that supplies integer values based on the provided count or distribution.
      */
+    @Suppress("UNCHECKED_CAST")
     fun countSupplier(
         count: Any? = null,
         countDist: String? = null

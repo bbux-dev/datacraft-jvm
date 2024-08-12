@@ -40,9 +40,9 @@ class ConstantValueSupplier<T>(private val value: T) : ValueSupplier<T> {
  *
  * @property weights A map where keys are the values to supply and values are the weights of these values.
  */
-class WeightedValueSupplier(private val weights: Map<Any, Any>) : ValueSupplier<Any> {
-    private val cumulativeWeights: List<Pair<Any, Double>>
-    private val defaultValue: Any
+class WeightedValueSupplier<T : Any>(private val weights: Map<T, Number>) : ValueSupplier<T> {
+    private val cumulativeWeights: List<Pair<T, Double>>
+    private val defaultValue: T
 
     init {
         val validatedWeights = weights.mapValues { (_, value) ->
@@ -57,7 +57,7 @@ class WeightedValueSupplier(private val weights: Map<Any, Any>) : ValueSupplier<
         val totalWeight = validatedWeights.values.sum()
         var sum = 0.0
         var maxWeight = Double.MIN_VALUE
-        var tempDefaultValue: Any? = null
+        var tempDefaultValue: T? = null
 
         cumulativeWeights = validatedWeights.map { (value, weight) ->
             // Update maxWeight and defaultValue if current weight is greater
@@ -81,7 +81,7 @@ class WeightedValueSupplier(private val weights: Map<Any, Any>) : ValueSupplier<
      * @param iteration Ignored in this implementation, as the value selection is random.
      * @return A value selected based on its weighted probability.
      */
-    override fun next(iteration: Long): Any {
+    override fun next(iteration: Long): T {
         val randomValue = Random.nextDouble()
         // Find the first entry in the cumulative weights that is greater than or equal to the random value
         val foundPair = cumulativeWeights.find { (_, cumWeight) -> randomValue < cumWeight }
